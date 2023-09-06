@@ -2,7 +2,7 @@ import { RegistroPersona_interface } from 'src/app/components/registro-de-person
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Data_RegistroDePersonas } from './../../../assets/data/RegistroDePersonas/RegistroDePersonas';
+import { Data_RegistroDePersonas } from '../../../assets/data/RegistroDePersonas/RegistroDePersonas';
 
 @Injectable({
   providedIn: 'root'

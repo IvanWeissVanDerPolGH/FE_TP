@@ -1,59 +1,74 @@
 <p>reserva-de-turnos works!</p>
 
+<!-- Filtros -->
+<div class="filters">
+  <h2>Filter Options</h2>
+  <label for="doctorFilter">Doctor:</label>
+  <input type="text" id="doctorFilter" [(ngModel)]="filtros.doctor" (input)="applyFilters()">
+
+  <label for="pacienteFilter">Paciente:</label>
+  <input type="text" id="pacienteFilter" [(ngModel)]="filtros.paciente" (input)="applyFilters()">
+
+  <label for="dateDesdeFilter">Fecha desde:</label>
+  <input type="date" id="dateDesdeFilter" [(ngModel)]="filtros.fechaDesde" (input)="applyFilters()">
+
+  <label for="dateHastaFilter">Fecha hasta:</label>
+  <input type="date" id="dateHastaFilter" [(ngModel)]="filtros.fechaHasta" (input)="applyFilters()">
+
+  <button (click)="applyFilters()">Apply Filters</button> <!-- Add this button -->
+</div>
+
 <!-- Formulario de Reserva -->
 <div class="reservation-form">
   <h2>Reservar Turno</h2>
-  <!-- <form (submit)="reservarTurno()"> -->
-  <form>
+  <form (submit)="reservarTurno()">
     <label for="doctor">Doctor:</label>
-    <select id="doctor">
-      <!-- Opciones para seleccionar un doctor -->
-      <option value="doctor1">Doctor 1</option>
-      <option value="doctor2">Doctor 2</option>
-      <!-- Otras opciones de doctores -->
-    </select>
+    <input type="text" id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor">
 
-    <label for="fecha">Fecha:</label>
-    <input type="date" id="fecha">
+    <label for="paciente">Pacient:</label>
+    <input type="text" id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="pacient">
+
+    <label for="date">Fecha:</label>
+    <input type="date" id="reservanueva_date" [(ngModel)]="nuevaReserva.fecha" name="date">
 
     <label for="hora">Hora:</label>
-    <select id="hora">
+    <select id="reservanueva_timeName" [(ngModel)]="nuevaReserva.hora" name="time">
       <!-- Opciones para seleccionar la hora -->
-      <option value="09:00">09:00 - 10:00</option>
-      <option value="10:00">10:00 - 11:00</option>
+      <option value="08:00">08:00 - 08:30</option>
+      <option value="08:30">08:30 - 09:00</option>
+      <option value="09:00">09:00 - 09:30</option>
+      <option value="09:30">09:30 - 10:00</option>
+      <option value="10:00">10:00 - 10:30</option>
+      <option value="10:30">10:30 - 11:00</option>
+      <option value="11:00">11:00 - 11:30</option>
+      <option value="11:30">11:30 - 12:00</option>
+      <option value="12:00">12:00 - 12:30</option>
+      <option value="12:30">12:30 - 13:00</option>
+      <option value="13:00">13:00 - 13:30</option>
+      <option value="13:30">13:30 - 14:00</option>
+      <option value="14:00">14:00 - 14:30</option>
+      <option value="14:30">14:30 - 15:00</option>
+      <option value="15:00">15:00 - 15:30</option>
+      <option value="15:30">15:30 - 16:00</option>
+      <option value="16:00">16:00 - 16:30</option>
+      <option value="16:30">16:30 - 17:00</option>
+      <option value="17:00">17:00 - 17:30</option>
+      <option value="17:30">17:30 - 18:00</option>
+      <option value="18:00">18:00 - 18:30</option>
+      <option value="18:30">18:30 - 19:00</option>
+      <option value="19:00">19:00 - 19:30</option>
+      <option value="19:30">19:30 - 20:00</option>
+      <option value="20:00">20:00 - 20:30</option>
+      <option value="20:30">20:30 - 21:00</option>
       <!-- Otras opciones de horarios -->
     </select>
 
-    <button type="submit">Reservar</button>
+    <button type="submit" id="addReservationButton">Reservar</button>
   </form>
 </div>
 
-<!-- Filtros -->
-<div class="filters">
-  <label for="doctorFilter">Doctor:</label>
-  <select id="doctorFilter">
-    <!-- Opciones para seleccionar un doctor -->
-    <option value="">Todos los doctores</option>
-    <!-- Otras opciones de doctores -->
-  </select>
-
-  <label for="pacienteFilter">Paciente:</label>
-  <select id="pacienteFilter">
-    <!-- Opciones para seleccionar un paciente -->
-    <option value="">Todos los pacientes</option>
-    <!-- Otras opciones de pacientes -->
-  </select>
-
-  <label for="fechaDesdeFilter">Fecha desde:</label>
-  <input type="date" id="fechaDesdeFilter">
-
-  <label for="fechaHastaFilter">Fecha hasta:</label>
-  <input type="date" id="fechaHastaFilter">
-
-  <button (click)="aplicarFiltros()">Aplicar Filtros</button>
-</div>
-
 <!-- Lista de Reservas -->
+<h2>Tabla de turnos</h2>
 <table>
   <thead>
     <tr>
@@ -65,13 +80,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let reserva of reservas">
+    <tr *ngFor="let reserva of reservas; let i = index">
       <td>{{ reserva.doctor }}</td>
       <td>{{ reserva.paciente }}</td>
       <td>{{ reserva.fecha }}</td>
-      <td>{{ reserva.hora }}</td>
+      <td>{{ reserva.horario }}</td>
       <td>
-        <button (click)="cancelarReserva(reserva.id)">Cancelar</button>
+        <button (click)="cancelReserva(reserva.id)">Cancelar</button>
+        <button (click)="editReserva(i)">Editar</button>
+        <button *ngIf="isEditing[i]" (click)="updateReserva(reserva, i)">Actualizar</button>
       </td>
     </tr>
   </tbody>

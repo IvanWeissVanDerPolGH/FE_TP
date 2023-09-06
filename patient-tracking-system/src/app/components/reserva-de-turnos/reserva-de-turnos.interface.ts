@@ -1,4 +1,4 @@
-export interface ReservaDeTurno {
+export interface ReservaDeTurno_interface {
   id: number; // ID único de la reserva
   doctor: string; // Nombre del doctor
   paciente: string; // Nombre del paciente

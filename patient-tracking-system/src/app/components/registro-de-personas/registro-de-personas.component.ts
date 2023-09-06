@@ -1,5 +1,4 @@
-import { RegistroPersonaService } from 'src/app/services/registroDePersonas/service-registro-de-personas.service';
-// registro-de-personas/registro-de-personas.component.ts
+import { RegistroPersonaService } from 'src/app/components/registro-de-personas/registro-de-personas.service';
 import { Component, OnInit } from '@angular/core';
 import { RegistroPersona_interface } from './registro-de-personas.interface';
 

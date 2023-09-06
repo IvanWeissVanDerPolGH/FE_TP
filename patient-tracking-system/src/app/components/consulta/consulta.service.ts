@@ -1,4 +1,4 @@
-import { Data_consulta } from './../../../assets/data/consulta/data_consulta';
+import { Data_consulta } from '../../../assets/data/consulta/data_consulta';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
