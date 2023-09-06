@@ -1,0 +1,78 @@
+<p>reserva-de-turnos works!</p>
+
+<!-- Formulario de Reserva -->
+<div class="reservation-form">
+  <h2>Reservar Turno</h2>
+  <!-- <form (submit)="reservarTurno()"> -->
+  <form>
+    <label for="doctor">Doctor:</label>
+    <select id="doctor">
+      <!-- Opciones para seleccionar un doctor -->
+      <option value="doctor1">Doctor 1</option>
+      <option value="doctor2">Doctor 2</option>
+      <!-- Otras opciones de doctores -->
+    </select>
+
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha">
+
+    <label for="hora">Hora:</label>
+    <select id="hora">
+      <!-- Opciones para seleccionar la hora -->
+      <option value="09:00">09:00 - 10:00</option>
+      <option value="10:00">10:00 - 11:00</option>
+      <!-- Otras opciones de horarios -->
+    </select>
+
+    <button type="submit">Reservar</button>
+  </form>
+</div>
+
+<!-- Filtros -->
+<div class="filters">
+  <label for="doctorFilter">Doctor:</label>
+  <select id="doctorFilter">
+    <!-- Opciones para seleccionar un doctor -->
+    <option value="">Todos los doctores</option>
+    <!-- Otras opciones de doctores -->
+  </select>
+
+  <label for="pacienteFilter">Paciente:</label>
+  <select id="pacienteFilter">
+    <!-- Opciones para seleccionar un paciente -->
+    <option value="">Todos los pacientes</option>
+    <!-- Otras opciones de pacientes -->
+  </select>
+
+  <label for="fechaDesdeFilter">Fecha desde:</label>
+  <input type="date" id="fechaDesdeFilter">
+
+  <label for="fechaHastaFilter">Fecha hasta:</label>
+  <input type="date" id="fechaHastaFilter">
+
+  <button (click)="aplicarFiltros()">Aplicar Filtros</button>
+</div>
+
+<!-- Lista de Reservas -->
+<table>
+  <thead>
+    <tr>
+      <th>Doctor</th>
+      <th>Paciente</th>
+      <th>Fecha</th>
+      <th>Hora</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let reserva of reservas">
+      <td>{{ reserva.doctor }}</td>
+      <td>{{ reserva.paciente }}</td>
+      <td>{{ reserva.fecha }}</td>
+      <td>{{ reserva.hora }}</td>
+      <td>
+        <button (click)="cancelarReserva(reserva.id)">Cancelar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

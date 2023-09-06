@@ -1,0 +1,79 @@
+<p>registro-de-personas works!</p>
+<!-- registro-de-personas/registro-de-personas.component.html -->
+<div>
+  <!-- Filter section -->
+  <div>
+    <h2>Filter Options</h2>
+    <label for="nombreFilter">Nombre:</label>
+    <input type="text" id="nombreFilter" [(ngModel)]="nombreFilter" (input)="applyFilters()">
+
+    <label for="apellidoFilter">Apellido:</label>
+    <input type="text" id="apellidoFilter" [(ngModel)]="apellidoFilter" (input)="applyFilters()">
+
+    <label for="tipoFilter">Tipo:</label>
+    <select id="tipoFilter" [(ngModel)]="filtroTipo" (change)="applyFilters()">
+      <option value="todos">Todos</option>
+      <option value="pacientes">Pacientes</option>
+      <option value="doctores">Doctores</option>
+    </select>
+  </div>
+
+  <!-- Add Persona form -->
+  <div>
+    <h2>Add Persona</h2>
+    <form (submit)="addPersona()">
+      <!-- Input fields for persona details -->
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" [(ngModel)]="newPersona.nombre" required>
+
+      <label for="apellido">Apellido:</label>
+      <input type="text" id="apellido" name="apellido" [(ngModel)]="newPersona.apellido" required>
+
+      <label for="telefono">Teléfono:</label>
+      <input type="text" id="telefono" name="telefono" [(ngModel)]="newPersona.telefono" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" [(ngModel)]="newPersona.email" required>
+
+      <label for="cedula">Cédula:</label>
+      <input type="text" id="cedula" name="cedula" [(ngModel)]="newPersona.cedula" required>
+
+      <label for="flag_es_doctor">Es Doctor?</label>
+      <input type="checkbox" id="flag_es_doctor" name="flag_es_doctor" [(ngModel)]="newPersona.flag_es_doctor">
+
+      <button type="submit">Add</button>
+     </form>
+  </div>
+
+<!-- Table to display personas -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Teléfono</th>
+      <th>Email</th>
+      <th>Cédula</th>
+      <th>Flag Es Doctor</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let persona of filteredPersonas; let i = index">
+      <td>{{ persona.idPersona }}</td>
+      <td>{{ persona.nombre }}</td>
+      <td>{{ persona.apellido }}</td>
+      <td>{{ persona.telefono }}</td>
+      <td>{{ persona.email }}</td>
+      <td>{{ persona.cedula }}</td>
+      <td>{{ persona.flag_es_doctor }}</td>
+      <td>
+        <button (click)="editPersona(i)">Edit</button>
+        <button (click)="deletePersona(persona.idPersona)">Delete</button>
+        <button *ngIf="isEditing[i]" (click)="updatePersona(persona, i)">Update</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>

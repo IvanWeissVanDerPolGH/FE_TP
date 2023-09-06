@@ -1,0 +1,43 @@
+<p>consulta works!</p>
+<div>
+  <h2>Consultations</h2>
+
+  <form (ngSubmit)="addConsulta()" #consultaForm="ngForm">
+    <div class="form-group">
+      <label for="idCategoria">ID de Categoría:</label>
+      <input type="number" id="idCategoria" name="idCategoria" [(ngModel)]="newConsulta.idCategoria" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" [(ngModel)]="newConsulta.descripcion" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Consulta</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID Category</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Use *ngFor to loop through Consultas and display each consultation -->
+      <tr *ngFor="let consulta of listaDeConsultas; let i = index">
+        <td>
+          <span *ngIf="!consulta.isEditing">{{ consulta.idCategoria }}</span>
+          <input *ngIf="consulta.isEditing" type="number" [(ngModel)]="consulta.idCategoria">
+        </td>
+        <td>
+          <span *ngIf="!consulta.isEditing">{{ consulta.descripcion }}</span>
+          <input *ngIf="consulta.isEditing" type="text" [(ngModel)]="consulta.descripcion">
+        </td>
+        <td>
+          <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)">Edit</button>
+          <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)">Update</button>
+          <button (click)="deleteConsulta(consulta.idCategoria)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

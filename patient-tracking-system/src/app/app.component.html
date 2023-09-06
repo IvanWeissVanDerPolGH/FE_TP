@@ -1,0 +1,16 @@
+<header>
+  <nav>
+    <ul>
+      <li><a [routerLink]="['']">Home</a></li>
+      <li><a [routerLink]="['/consultas']">Consultas</a></li>
+      <li><a [routerLink]="['/registroDePersonas']">registro De Personas</a></li>
+      <li><a [routerLink]="['/reserva-de-turnos']">Reserva de Turnos</a></li>
+      <!-- Add more navigation links as needed -->
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <!-- The router-outlet is a placeholder for displaying the current route's component -->
+  <router-outlet></router-outlet>
+</main>
