@@ -1,4 +1,3 @@
-<p>registro-de-personas works!</p>
 <!-- registro-de-personas/registro-de-personas.component.html -->
 <div>
   <!-- Filter section -->
@@ -61,17 +60,38 @@
   </thead>
   <tbody>
     <tr *ngFor="let persona of filteredPersonas; let i = index">
-      <td>{{ persona.idPersona }}</td>
-      <td>{{ persona.nombre }}</td>
-      <td>{{ persona.apellido }}</td>
-      <td>{{ persona.telefono }}</td>
-      <td>{{ persona.email }}</td>
-      <td>{{ persona.cedula }}</td>
-      <td>{{ persona.flag_es_doctor }}</td>
       <td>
-        <button (click)="editPersona(i)">Edit</button>
+        <span *ngIf="!persona.isEditing">{{ persona.idPersona }}</span>
+        <input *ngIf="persona.isEditing" type="number" [(ngModel)]="persona.idPersona">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.nombre }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.nombre">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.apellido }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.apellido">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.telefono }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.telefono">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.email }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.email">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.cedula }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.cedula">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.flag_es_doctor }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.flag_es_doctor">
+      </td>
+      <td>
+        <button *ngIf="!persona.isEditing" (click)="editPersona(persona)">Edit</button>
+        <button *ngIf="persona.isEditing" (click)="updatePersona(persona, i)">Update</button>
         <button (click)="deletePersona(persona.idPersona)">Delete</button>
-        <button *ngIf="isEditing[i]" (click)="updatePersona(persona, i)">Update</button>
       </td>
     </tr>
   </tbody>

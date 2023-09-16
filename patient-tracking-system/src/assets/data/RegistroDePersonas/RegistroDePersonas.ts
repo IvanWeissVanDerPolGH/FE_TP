@@ -7,6 +7,7 @@ export const Data_RegistroDePersonas = [
     email: 'john.doe@example.com',
     cedula: 'A12345',
     flag_es_doctor: false,
+    isEditing: false
   },
   {
     idPersona: 2,
@@ -16,6 +17,7 @@ export const Data_RegistroDePersonas = [
     email: 'jane.smith@example.com',
     cedula: 'B67890',
     flag_es_doctor: false,
+    isEditing: false
   },
   {
     idPersona: 3,
@@ -25,6 +27,7 @@ export const Data_RegistroDePersonas = [
     email: 'dr.robert@example.com',
     cedula: 'C54321',
     flag_es_doctor: true,
+    isEditing: false
   },
   {
     idPersona: 4,
@@ -34,6 +37,7 @@ export const Data_RegistroDePersonas = [
     email: 'dr.sarah@example.com',
     cedula: 'D98765',
     flag_es_doctor: true,
+    isEditing: false
   },
   {
     idPersona: 5,
@@ -43,14 +47,16 @@ export const Data_RegistroDePersonas = [
     email: 'rpiper0@storify.com',
     cedula: '8049789',
     flag_es_doctor: true,
+    isEditing: false
   },
   {
-    idPersona: 1,
+    idPersona: 6,
     nombre: 'Wilburt',
     apellido: 'Garric',
     telefono: '303-550-9242',
     email: 'wgarric0@networkadvertising.org',
     cedula: 'D98765',
     flag_es_doctor: true,
+    isEditing: false
   },
 ];
