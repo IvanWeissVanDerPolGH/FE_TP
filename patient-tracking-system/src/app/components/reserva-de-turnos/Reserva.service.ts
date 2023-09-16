@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
-// import { formatDate } from '@angular/common';
 
 export type ReservaDeTurnoFormateada = {
   fecha: string;
