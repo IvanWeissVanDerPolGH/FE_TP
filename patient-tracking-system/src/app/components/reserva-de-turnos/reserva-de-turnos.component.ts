@@ -11,7 +11,7 @@ import { RegistroPersonaService } from '../registro-de-personas/registro-de-pers
   styleUrls: ['./reserva-de-turnos.component.css']
 })
 export class ReservaDeTurnosComponent implements OnInit {
-  reservas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
+  reservasFormateadas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
   personas: any[] = []; // Declaración de la propiedad personas//Marco
   filtros: ReservaDeTurnoFiltro = {
     doctor: '',
@@ -19,11 +19,11 @@ export class ReservaDeTurnosComponent implements OnInit {
     fechaDesde: '',
     fechaHasta: ''
   };
-  nuevaReserva: ReservaDeTurnoFormateada = {
+  nuevaReserva: ReservaDeTurno = {
     id: 0,
     doctor: '',
     paciente: '',
-    fecha: this.reservaService.formattedDate(new Date(0)),
+    fecha: new Date(0),
     hora: ''
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
@@ -48,39 +48,17 @@ export class ReservaDeTurnosComponent implements OnInit {
     this.filtros.fechaDesde = this.reservaService.formattedDate(new Date());
     this.filtros.fechaHasta = this.reservaService.formattedDate(new Date());
     // Llama al servicio para cargar las reservas con los filtros
-    this.reservaService.getReservas(this.filtros).subscribe((reservas) => {
-      this.reservas = reservas;
-
-    });
+    this.applyFilters();
   }
 
   // Aplicar filtros y cargar las reservas
   applyFilters(): void {
     // Llama al servicio para cargar las reservas con los filtros
-    this.reservaService.getReservas(this.filtros).subscribe((reservas) => {
-      this.reservas = reservas;
-      // Reset nuevaReserva object
-      this.nuevaReserva = {
-        id: 0,
-        doctor: '',
-        paciente: '',
-        fecha: this.reservaService.formattedDate(new Date(0)),
-        hora: ''
-      };
+    this.reservaService.getReservas(this.filtros).subscribe((reservasFormateadas) => {
+      this.reservasFormateadas = reservasFormateadas;
+      console.log(reservasFormateadas)
+
     });
-  }
-  
-  // Add a new reservation
-  addReserva(reserva: ReservaDeTurnoFormateada): Observable<any> {
-    // Generate a unique ID for the new reservation
-    reserva.id = this.reservaService.generateNewId();
-
-    console.log(reserva)
-    console.log(this.reservas)
-    // Push the new reservation to the array
-    this.reservas.push(reserva);
-
-    return of(this.reservas);
   }
 
   // Reservar un turno
@@ -88,20 +66,12 @@ export class ReservaDeTurnosComponent implements OnInit {
     // Check if the required fields are not empty
     if (this.nuevaReserva.doctor && this.nuevaReserva.paciente && this.nuevaReserva.fecha && this.nuevaReserva.hora) {
       // Call the service to add the new reservation
-      this.addReserva(this.nuevaReserva).subscribe(() => {
-        // Reset the form fields after successful reservation
-        // puede que no sea necesario
-        this.nuevaReserva = {
-          id:0,
-          doctor: '',
-          paciente: '',
-          fecha: this.reservaService.formattedDate(new Date(0)),
-          hora: ''
-        };
-        // Reload the reservations with filters applied
-        this.applyFilters();
+      this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
 
+        
       });
+      // Reload the reservations with filters applied
+      this.applyFilters();
     }
 
   }
