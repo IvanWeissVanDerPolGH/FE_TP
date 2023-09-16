@@ -29,13 +29,14 @@ export class ReservaService {
     let dd = String(date.getDate()).padStart(2, '0');
     let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0
     let yyyy = date.getFullYear();
-    return yyyy + '-' + mm + '-' + dd;
+    return yyyy + '/' + mm + '/' + dd;
   }
 
   // Get a list of reservations based on filters
   getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
     let filteredReservas = this.reservas;
+    console.log(filtros)
 
     // parece que est mal la logica, no se esta pisando los valores de filtro.doctor cuando hace el filtro de filtro.fechaHasta?
 
@@ -53,6 +54,8 @@ export class ReservaService {
       filteredReservas = filteredReservas.filter((reserva) =>
         reserva.fecha >= new Date(filtros.fechaDesde)
       );
+      console.log(new Date(filtros.fechaDesde));
+      console.log(filtros.fechaDesde);
     }
     if (filtros.fechaHasta) {
       filteredReservas = filteredReservas.filter((reserva) =>
@@ -61,16 +64,29 @@ export class ReservaService {
     }
 
     // Format the 'fecha' property using Angular's formatDate
-    const formattedReservas = filteredReservas!.map((reserva) => {
+    const formattedReservas = filteredReservas.map((reserva) => {
       return {
         ...reserva,
         fecha: this.formattedDate(reserva.fecha), // Format the 'fecha' property
       };
     });
 
+    console.log(formattedReservas)
     return of(formattedReservas);
   }
 
+  // Add a new reservation
+  addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
+    // Generate a unique ID for the new reservation
+    reserva.id = this.generateNewId();
+
+    console.log(reserva)
+    // Push the new reservation to the array
+    this.reservas.push(reserva);
+    console.log(this.reservas)
+
+    return of(this.reservas);
+  }
 
   // Cancel a reservation by its ID
   cancelReserva(idReserva: number): Observable<ReservaDeTurno[]> {
