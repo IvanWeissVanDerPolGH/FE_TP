@@ -36,7 +36,6 @@ export class ReservaService {
   getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
     let filteredReservas = this.reservas;
-    console.log(filtros)
 
     // parece que est mal la logica, no se esta pisando los valores de filtro.doctor cuando hace el filtro de filtro.fechaHasta?
 
@@ -52,15 +51,13 @@ export class ReservaService {
     }
     if (filtros.fechaDesde) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.fecha >= new Date(filtros.fechaDesde)
+        reserva.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
       );
-      console.log(new Date(filtros.fechaDesde));
-      console.log(filtros.fechaDesde);
     }
     if (filtros.fechaHasta) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.fecha <= new Date(filtros.fechaHasta)
-      );
+        reserva.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
+        );
     }
 
     // Format the 'fecha' property using Angular's formatDate
@@ -71,7 +68,6 @@ export class ReservaService {
       };
     });
 
-    console.log(formattedReservas)
     return of(formattedReservas);
   }
 
@@ -80,10 +76,8 @@ export class ReservaService {
     // Generate a unique ID for the new reservation
     reserva.id = this.generateNewId();
 
-    console.log(reserva)
     // Push the new reservation to the array
     this.reservas.push(reserva);
-    console.log(this.reservas)
 
     return of(this.reservas);
   }
