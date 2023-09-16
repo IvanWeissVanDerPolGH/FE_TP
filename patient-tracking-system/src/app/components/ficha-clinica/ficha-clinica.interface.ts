@@ -4,5 +4,5 @@ export interface FichaClinica {
     id: number;
     motivo: string;
     diagnostico: string;
-    categoria: Categoria;
+    categoria: number;
 }
