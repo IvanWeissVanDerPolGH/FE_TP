@@ -8,14 +8,18 @@ import { Data_RegistroDePersonas } from '../../../assets/data/RegistroDePersonas
   providedIn: 'root'
 })
 export class RegistroPersonaService {
+  private list_registrodepersonas: RegistroPersona_interface[]
 
 
-  constructor() {}
+  constructor() {
+    this.list_registrodepersonas = Data_RegistroDePersonas
+  }
+
   // Read operation: Get the list of personas
   getPersonas_sample(): Observable<RegistroPersona_interface[]> {
     // You can return the list of personas directly or fetch from an API if needed
     return new Observable<RegistroPersona_interface[]>((observer) => {
-      observer.next(Data_RegistroDePersonas);
+      observer.next(this.list_registrodepersonas);
       observer.complete();
     });
   }
@@ -29,7 +33,7 @@ export class RegistroPersonaService {
     persona.idPersona = newId;
 
     // Push the new persona to the data source
-    Data_RegistroDePersonas.push(persona);
+    this.list_registrodepersonas.push(persona);
 
     // You can save the updated data source to a file or an API if needed
 
@@ -41,11 +45,11 @@ export class RegistroPersonaService {
 
   // Update operation: Update an existing persona
   updatePersona(persona: RegistroPersona_interface): Observable<void> {
-    const index = Data_RegistroDePersonas.findIndex((p) => p.idPersona === persona.idPersona);
+    const index = this.list_registrodepersonas.findIndex((p) => p.idPersona === persona.idPersona);
 
     if (index !== -1) {
       // Replace the existing persona with the updated one
-      Data_RegistroDePersonas[index] = persona;
+      this.list_registrodepersonas[index] = persona;
 
       // You can save the updated data source to a file or an API if needed
     }
@@ -58,11 +62,11 @@ export class RegistroPersonaService {
 
   // Delete operation: Remove a persona by ID
   deletePersona(idPersona: number): Observable<void> {
-    const index = Data_RegistroDePersonas.findIndex((p) => p.idPersona === idPersona);
+    const index = this.list_registrodepersonas.findIndex((p) => p.idPersona === idPersona);
 
     if (index !== -1) {
       // If the persona is found, remove it from the array
-      Data_RegistroDePersonas.splice(index, 1);
+      this.list_registrodepersonas.splice(index, 1);
 
       // You can save the updated data source to a file or an API if needed
     }
@@ -76,7 +80,7 @@ export class RegistroPersonaService {
   // Generate a new unique ID (You may implement your own logic)
   private generateNewId(): number {
     // Find the maximum ID in the current data
-    const maxId = Math.max(...Data_RegistroDePersonas.map((p) => p.idPersona), 0);
+    const maxId = Math.max(...this.list_registrodepersonas.map((p) => p.idPersona), 0);
 
     // Generate a new ID by incrementing the maximum ID
     return maxId + 1;
