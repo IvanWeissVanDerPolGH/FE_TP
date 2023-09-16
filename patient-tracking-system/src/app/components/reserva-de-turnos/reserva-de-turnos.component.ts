@@ -64,17 +64,18 @@ export class ReservaDeTurnosComponent implements OnInit {
     // Check if the required fields are not empty
     if (this.nuevaReserva.fecha && this.nuevaReserva.hora) {
       // Buscar el Doctor seleccionado en la lista de personas
-      let doctorSeleccionado = this.personas.find(persona => persona.nombre === this.nuevaReserva.doctor);
+      let doctorSeleccionado = this.personas.find(persona => persona.nombre + ' ' + persona.apellido === this.nuevaReserva.doctor);
       // Buscar el Paciente seleccionado en la lista de personas
-      let pacienteSeleccionado = this.personas.find(persona => persona.nombre === this.nuevaReserva.paciente);
+      let pacienteSeleccionado = this.personas.find(persona => persona.nombre + ' ' + persona.apellido === this.nuevaReserva.paciente);
 
       // Verificar si se encontraron el Doctor y el Paciente
       if (doctorSeleccionado && pacienteSeleccionado) {
         // Asignar los nombres de las personas seleccionadas
-        this.nuevaReserva.doctor = doctorSeleccionado.nombre;
-        this.nuevaReserva.paciente = pacienteSeleccionado.nombre;
+        //this.nuevaReserva.doctor = doctorSeleccionado.nombre ;
+        //this.nuevaReserva.paciente = pacienteSeleccionado.nombre;
+        this.nuevaReserva.doctor = doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido;
+        this.nuevaReserva.paciente = pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido;
         this.nuevaReserva.fecha = new Date(this.nuevaReserva.fecha);
-       // this.nuevaReserva.hora = 
       
         // Call the service to add the new reservation
         this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
