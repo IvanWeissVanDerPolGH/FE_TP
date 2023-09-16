@@ -64,16 +64,16 @@ export class ConsultaComponent implements OnInit{
   // Delete operation: Remove a consultation by idCategoria
   deleteConsulta(idCategoria: number): Observable<Consulta[]> {
     // Find the index of the consultation with the matching idCategoria
-    const index = Data_consulta.findIndex(consulta => consulta.idCategoria === idCategoria);
+    const index = this.listaDeConsultas.findIndex(consulta => consulta.idCategoria === idCategoria);
 
     if (index !== -1) {
       // If the consultation is found, remove it from the array
-      Data_consulta.splice(index, 1);
+      this.listaDeConsultas.splice(index, 1);
     }
 
     // Return the updated list of consultations as an observable
     return new Observable<Consulta[]>(observer => {
-      observer.next(Data_consulta);
+      observer.next(this.listaDeConsultas);
       observer.complete();
     });
   }

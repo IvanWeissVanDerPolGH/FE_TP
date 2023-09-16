@@ -9,13 +9,16 @@ import { Consulta } from 'src/app/components/consulta/consulta.interface';
 })
 export class ConsultaService {
 
+  private listaDataConsulta: Consulta[]
   // constructor(private http: HttpClient) {}
-  constructor() {}
+  constructor() {
+    this.listaDataConsulta = Data_consulta
+  }
 
   getConsultas_sample(): Observable<Consulta[]> {
     // Return the data from the Data_consulta constant as an observable
     return new Observable<Consulta[]>(observer => {
-      observer.next(Data_consulta);
+      observer.next(this.listaDataConsulta);
       observer.complete();
     });
   }
@@ -23,10 +26,10 @@ export class ConsultaService {
     // Create operation: Add a new consultation
     addConsulta(consulta: Consulta): Observable<Consulta[]> {
 
-      Data_consulta.push(consulta);
+      this.listaDataConsulta.push(consulta);
       // You can optionally return the added consultation
       return new Observable<Consulta[]>(observer => {
-        observer.next(Data_consulta);
+        observer.next(this.listaDataConsulta);
         observer.complete();
       });
     }
@@ -35,16 +38,16 @@ export class ConsultaService {
     // Update operation: Update a consultation by idCategoria
   updateConsulta(consultaToUpdate: Consulta): Observable<Consulta[]> {
     // Find the index of the consultation with the matching idCategoria
-    const index = Data_consulta.findIndex(consulta => consulta.idCategoria === consultaToUpdate.idCategoria);
+    const index = this.listaDataConsulta.findIndex(consulta => consulta.idCategoria === consultaToUpdate.idCategoria);
 
     if (index !== -1) {
       // If the consultation is found, update its properties
-      Data_consulta[index].descripcion = consultaToUpdate.descripcion;
+      this.listaDataConsulta[index].descripcion = consultaToUpdate.descripcion;
     }
 
     // Return the updated list of consultations as an observable
     return new Observable<Consulta[]>(observer => {
-      observer.next(Data_consulta);
+      observer.next(this.listaDataConsulta);
       observer.complete();
     });
   }
