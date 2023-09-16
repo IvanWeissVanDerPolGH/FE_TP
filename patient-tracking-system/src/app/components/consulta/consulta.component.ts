@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConsultaService } from 'src/app/components/consulta/consulta.service';
-import { Consulta } from './consulta.interface';
+import { Categoria } from './consulta.interface';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -11,8 +11,8 @@ import { Observable } from 'rxjs';
 
 
 export class ConsultaComponent implements OnInit{
-  newConsulta: Consulta = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
-  listaDeConsultas: Consulta[] = [];
+  newConsulta: Categoria = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
+  listaDeConsultas: Categoria[] = [];
 
   constructor(private ConsultaService: ConsultaService) {}
 
@@ -45,13 +45,13 @@ export class ConsultaComponent implements OnInit{
   }
 
   // Edit operation: Enable editing for a consultation
-  editConsulta(consulta: Consulta): void {
+  editConsulta(consulta: Categoria): void {
     consulta.isEditing = true;
     this.sortConsultasById();
   }
 
   // Update operation: Apply changes to a consultation
-  updateConsulta(consulta: Consulta, index: number): void {
+  updateConsulta(consulta: Categoria, index: number): void {
     // Send the updated consultation to the service for processing
     this.ConsultaService.updateConsulta(consulta).subscribe(() => {
       // Optionally, you can handle the response here and update the list
@@ -61,7 +61,7 @@ export class ConsultaComponent implements OnInit{
   }
 
   // Delete operation: Remove a consultation by idCategoria
-  deleteConsulta(idCategoria: number): Observable<Consulta[]> {
+  deleteConsulta(idCategoria: number): Observable<Categoria[]> {
     // Find the index of the consultation with the matching idCategoria
     const index = this.listaDeConsultas.findIndex(consulta => consulta.idCategoria === idCategoria);
 
@@ -71,7 +71,7 @@ export class ConsultaComponent implements OnInit{
     }
 
     // Return the updated list of consultations as an observable
-    return new Observable<Consulta[]>(observer => {
+    return new Observable<Categoria[]>(observer => {
       observer.next(this.listaDeConsultas);
       observer.complete();
     });

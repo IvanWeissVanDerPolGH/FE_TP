@@ -3,7 +3,6 @@ import { Observable, of } from 'rxjs';
 import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
-// import { formatDate } from '@angular/common';
 
 export type ReservaDeTurnoFormateada = {
   fecha: string;
@@ -36,7 +35,7 @@ export class ReservaService {
   getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
     let filteredReservas = this.reservas;
-    console.log(this.reservas);
+
     // parece que est mal la logica, no se esta pisando los valores de filtro.doctor cuando hace el filtro de filtro.fechaHasta?
 
     if (filtros.doctor) {
@@ -51,15 +50,13 @@ export class ReservaService {
     }
     if (filtros.fechaDesde) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.fecha >= new Date(filtros.fechaDesde)
+        reserva.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
       );
-      console.log(new Date(filtros.fechaDesde));
     }
     if (filtros.fechaHasta) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.fecha <= new Date(filtros.fechaHasta)
+        reserva.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
         );
-        console.log(new Date(filtros.fechaDesde));
     }
 
     // Format the 'fecha' property using Angular's formatDate
@@ -75,15 +72,13 @@ export class ReservaService {
 
   // Add a new reservation
   addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
-    // Genera un ID unico para la reservacion
+    // Generate a unique ID for the new reservation
     reserva.id = this.generateNewId();
 
     // Push the new reservation to the array
     this.reservas.push(reserva);
-    console.log(this.reservas)
 
-    //retorna el Observable con el arrray y el nuevo elemento
-    return of([...this.reservas]);
+    return of(this.reservas);
   }
 
   // Cancel a reservation by its ID
