@@ -46,8 +46,6 @@ export class ReservaDeTurnosComponent implements OnInit {
     // Llama al servicio para cargar las reservas con los filtros
     this.reservaService.getReservas(this.filtros).subscribe((reservasFormateadas) => {
       this.reservasFormateadas = reservasFormateadas;
-      console.log(reservasFormateadas)
-
     });
   }
 
