@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
+import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
-import { formatDate } from '@angular/common';
+// import { formatDate } from '@angular/common';
 
 export type ReservaDeTurnoFormateada = {
   fecha: string;
@@ -24,11 +25,19 @@ export class ReservaService {
     this.reservas = data_DatosDeReservas;// Initialize with example data
   }
 
+  formattedDate(date: Date){
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0
+    let yyyy = date.getFullYear();
+    return yyyy + '-' + mm + '-' + dd;
+  }
 
   // Get a list of reservations based on filters
-  getReservas(filtros: any): Observable<ReservaDeTurnoFormateada[]> {
+  getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
-    let filteredReservas = [...this.reservas];
+    let filteredReservas = this.reservas;
+
+    // parece que est mal la logica, no se esta pisando los valores de filtro.doctor cuando hace el filtro de filtro.fechaHasta?
 
     if (filtros.doctor) {
       filteredReservas = filteredReservas.filter((reserva) =>
@@ -52,46 +61,19 @@ export class ReservaService {
     }
 
     // Format the 'fecha' property using Angular's formatDate
-    const formattedReservas = filteredReservas.map((reserva) => {
+    const formattedReservas = filteredReservas!.map((reserva) => {
       return {
         ...reserva,
-        fecha: formatDate(reserva.fecha, 'dd/MM/yyyy', 'en-US'), // Format the 'fecha' property
+        fecha: this.formattedDate(reserva.fecha), // Format the 'fecha' property
       };
     });
 
     return of(formattedReservas);
   }
 
-  // Add a new reservation
-  addReserva(reserva: any): Observable<any> {
-    // Generate a unique ID for the new reservation
-    const newId = this.generateNewId();
-
-
-    // Assign the new ID to the reservation
-    reserva.id = newId;
-    console.log(reserva)
-    console.log(this.reservas)
-    // Push the new reservation to the array
-    this.reservas.push(reserva);
-
-    return of(this.reservas);
-  }
-
-  // Update an existing reservation
-  updateReserva(reserva: any): Observable<any> {
-    const index = this.reservas.findIndex((r) => r.id === reserva.id);
-
-    if (index !== -1) {
-      // Update the reservation in the array
-      this.reservas[index] = reserva;
-    }
-
-    return of(this.reservas);
-  }
 
   // Cancel a reservation by its ID
-  cancelReserva(idReserva: number): Observable<any> {
+  cancelReserva(idReserva: number): Observable<ReservaDeTurno[]> {
     const index = this.reservas.findIndex((r) => r.id === idReserva);
 
     if (index !== -1) {
@@ -103,7 +85,7 @@ export class ReservaService {
   }
 
   // Generate a unique ID for a new reservation (you may need to implement this logic)
-  private generateNewId(): number {
+  generateNewId(): number {
     // Find the maximum ID in the current data
     const maxId = Math.max(...this.reservas.map((p) => p.id));
 
