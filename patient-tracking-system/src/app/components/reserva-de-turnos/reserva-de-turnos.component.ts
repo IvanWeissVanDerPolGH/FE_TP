@@ -3,7 +3,7 @@ import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
 import { ReservaDeTurno } from './reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { Observable, of } from 'rxjs';
-
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//Marco
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -12,6 +12,7 @@ import { Observable, of } from 'rxjs';
 })
 export class ReservaDeTurnosComponent implements OnInit {
   reservas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
+  personas: any[] = []; // Declaración de la propiedad personas//Marco
   filtros: ReservaDeTurnoFiltro = {
     doctor: '',
     paciente: '',
@@ -27,10 +28,19 @@ export class ReservaDeTurnosComponent implements OnInit {
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
 
-  constructor(private reservaService: ReservaService) {}
+  constructor(private reservaService: ReservaService, private personaService: RegistroPersonaService) {}//Marco
 
   ngOnInit(): void {
     this.initReservas(); // Carga las reservas del día actual por defecto
+    this.loadPersonas(); // Carga la lista de personas
+  }
+
+  //Marco
+  loadPersonas(): void {
+    this.personaService.getPersonas_sample().subscribe((personas) => {
+      // Aquí puedes acceder a la lista de personas (doctores y pacientes)
+      this.personas = personas;
+    });
   }
 
   // Carga las reservas del día actual
