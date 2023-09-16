@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ReservaService } from './Reserva.service';
+import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
+import { ReservaDeTurno } from './reserva-de-turnos.interface';
+import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface'
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -7,18 +9,20 @@ import { ReservaService } from './Reserva.service';
   styleUrls: ['./reserva-de-turnos.component.css']
 })
 export class ReservaDeTurnosComponent implements OnInit {
-  reservas: any[] = []; // Arreglo para almacenar las reservas
-  filtros: any = {
+  reservas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
+  filtros: ReservaDeTurnoFiltro = {
     doctor: '',
     paciente: '',
     fechaDesde: '',
     fechaHasta: ''
   };
-  nuevaReserva: any = {
+  nuevaReserva: ReservaDeTurno = {
+    id: 0,
     doctor: '',
     paciente: '',
-    fecha: '',
-    hora: ''
+    fecha: new Date(0),
+    hora: '',
+    isEditable: false
 
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
@@ -29,13 +33,20 @@ export class ReservaDeTurnosComponent implements OnInit {
     this.cargarReservas(); // Carga las reservas del día actual por defecto
   }
 
+  formattedDate() {
+    //asigna la fecha actual en el calendario como default
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0
+    let yyyy = today.getFullYear();
+
+    return yyyy + '-' + mm + '-' + dd;
+  }
+  
   // Carga las reservas del día actual
   cargarReservas(): void {
-    const fechaActual = new Date(); // Obtiene la fecha actual
-    const fechaDesde = fechaActual.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-    this.filtros.fechaDesde = fechaDesde;
-    this.filtros.fechaHasta = fechaDesde;
-
+    this.filtros.fechaDesde = this.formattedDate();
+    this.filtros.fechaHasta = this.formattedDate();
     // Llama al servicio para cargar las reservas con los filtros
     this.reservaService.getReservas(this.filtros).subscribe((reservas) => {
       this.reservas = reservas;
@@ -46,15 +57,17 @@ export class ReservaDeTurnosComponent implements OnInit {
 
   // Aplicar filtros y cargar las reservas
   applyFilters(): void {
-    this.cargarReservas()
     // Llama al servicio para cargar las reservas con los filtros
     this.reservaService.getReservas(this.filtros).subscribe((reservas) => {
       this.reservas = reservas;
       // Reset nuevaReserva object
       this.nuevaReserva = {
+        id: 0,
         doctor: '',
-        fecha: '',
-        hora: ''
+        paciente: '',
+        fecha: new Date(0),
+        hora: '',
+        isEditable: false
       };
     });
   }
@@ -67,9 +80,12 @@ export class ReservaDeTurnosComponent implements OnInit {
       this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
         // Reset the form fields after successful reservation
         this.nuevaReserva = {
+          id:0,
           doctor: '',
-          fecha: '',
-          hora: ''
+          paciente: '',
+          fecha: new Date(0),
+          hora: '',
+          isEditable: false
         };
         // Reload the reservations with filters applied
         this.applyFilters();

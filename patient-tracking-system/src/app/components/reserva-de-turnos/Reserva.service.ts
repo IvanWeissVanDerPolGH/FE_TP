@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ReservaDeTurno_interface } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
+import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
 import { formatDate } from '@angular/common';
+
+export type ReservaDeTurnoFormateada = {
+  fecha: string;
+  id: number;
+  doctor: string;
+  paciente: string;
+  hora: string;
+}
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservaService {
-  reservas: any[] = data_DatosDeReservas; // Initialize with example data
+  private reservas: ReservaDeTurno[]
 
-  constructor() {}
+  constructor() {
+    this.reservas = data_DatosDeReservas;// Initialize with example data
+  }
 
 
   // Get a list of reservations based on filters
-  getReservas(filtros: any): Observable<any[]> {
+  getReservas(filtros: any): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
     let filteredReservas = [...this.reservas];
 
@@ -93,7 +105,7 @@ export class ReservaService {
   // Generate a unique ID for a new reservation (you may need to implement this logic)
   private generateNewId(): number {
     // Find the maximum ID in the current data
-    const maxId = Math.max(...data_DatosDeReservas.map((p) => p.id), 0);
+    const maxId = Math.max(...this.reservas.map((p) => p.id));
 
     // Generate a new ID by incrementing the maximum ID
     return maxId + 1;
