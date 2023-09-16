@@ -57,6 +57,7 @@ export class ReservaDeTurnosComponent implements OnInit {
     // Llama al servicio para cargar las reservas con los filtros
     this.reservaService.getReservas(this.filtros).subscribe((reservasFormateadas) => {
       this.reservasFormateadas = reservasFormateadas;
+    
     });
   }
 
@@ -68,19 +69,26 @@ export class ReservaDeTurnosComponent implements OnInit {
       // Buscar el Paciente seleccionado en la lista de personas
       let pacienteSeleccionado = this.personas.find(persona => persona.nombre + ' ' + persona.apellido === this.nuevaReserva.paciente);
 
-      // Verificar si se encontraron el Doctor y el Paciente
-      if (doctorSeleccionado && pacienteSeleccionado) {
-        // Asignar los nombres de las personas seleccionadas
-        this.nuevaReserva.doctor = doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido;
-        this.nuevaReserva.paciente = pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido;
-        this.nuevaReserva.fecha = new Date(this.nuevaReserva.fecha + 'T00:00:00');
-      
-        // Call the service to add the new reservation
-        this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
-          // Reload the reservations with filters applied
-          this.applyFilters();
-        });
+        // Verificar si se encontraron el Doctor y el Paciente
+        if (doctorSeleccionado && pacienteSeleccionado) {
+          // Crear una nueva instancia de ReservaDeTurno
+          const nuevaReserva: ReservaDeTurno = {
+            id: 0,
+            doctor: doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido,
+            paciente: pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido,
+            fecha: new Date(this.nuevaReserva.fecha + 'T00:00:00'),
+            hora: this.nuevaReserva.hora
+          };
+
+          // Call the service to add the new reservation
+      this.reservaService.addReserva(nuevaReserva).subscribe(() => {
+        // Reload the reservations with filters applied
+        this.applyFilters();
+        console.log(nuevaReserva);
+      });
+     
       }
+     
     }
   }
   
