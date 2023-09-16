@@ -4,6 +4,7 @@ import { ReservaDeTurno } from './reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { Observable, of } from 'rxjs';
 import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//Marco
+import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -66,17 +67,20 @@ export class ReservaDeTurnosComponent implements OnInit {
       let doctorSeleccionado = this.personas.find(persona => persona.nombre === this.nuevaReserva.doctor);
       // Buscar el Paciente seleccionado en la lista de personas
       let pacienteSeleccionado = this.personas.find(persona => persona.nombre === this.nuevaReserva.paciente);
-  
+
       // Verificar si se encontraron el Doctor y el Paciente
       if (doctorSeleccionado && pacienteSeleccionado) {
         // Asignar los nombres de las personas seleccionadas
         this.nuevaReserva.doctor = doctorSeleccionado.nombre;
         this.nuevaReserva.paciente = pacienteSeleccionado.nombre;
-  
+        this.nuevaReserva.fecha = new Date(this.nuevaReserva.fecha);
+       // this.nuevaReserva.hora = 
+      
         // Call the service to add the new reservation
         this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
           // Reload the reservations with filters applied
           this.applyFilters();
+          console.log(this.nuevaReserva);
         });
       }
     }
