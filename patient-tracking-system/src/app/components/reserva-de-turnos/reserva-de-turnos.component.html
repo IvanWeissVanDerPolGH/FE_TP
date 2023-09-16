@@ -27,7 +27,7 @@
         <option value="">Selecciona un doctor</option>
         <ng-container *ngFor="let persona of personas">
           <ng-container *ngIf="persona.flag_es_doctor">
-            <option [value]="persona.nombre">{{ persona.nombre }}</option>
+            <option [value]="persona.nombre + ' ' + persona.apellido">{{ persona.nombre + ' ' + persona.apellido }}</option>
           </ng-container>
         </ng-container>
       </select>
@@ -39,7 +39,7 @@
       <option value="">Selecciona un paciente</option>
       <ng-container *ngFor="let persona of personas">
         <ng-container *ngIf="!persona.flag_es_doctor">
-          <option [value]="persona.nombre">{{ persona.nombre }}</option>
+          <option [value]="persona.nombre + ' ' + persona.apellido">{{ persona.nombre + ' ' + persona.apellido }}</option>
         </ng-container>
       </ng-container>
     </select>
