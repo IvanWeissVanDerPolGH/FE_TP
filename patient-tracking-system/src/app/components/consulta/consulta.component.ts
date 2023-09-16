@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConsultaService } from 'src/app/components/consulta/consulta.service';
 import { Consulta } from './consulta.interface';
-import { Data_consulta } from 'src/assets/data/consulta/data_consulta';
 import { Observable } from 'rxjs';
 
 @Component({

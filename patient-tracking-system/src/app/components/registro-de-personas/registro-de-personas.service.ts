@@ -1,7 +1,6 @@
 import { RegistroPersona_interface as Persona } from 'src/app/components/registro-de-personas/registro-de-personas.interface';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { Data_RegistroDePersonas } from '../../../assets/data/RegistroDePersonas/RegistroDePersonas';
 
 @Injectable({
@@ -78,7 +77,7 @@ export class RegistroPersonaService {
   // Generate a new unique ID (You may implement your own logic)
   private generateNewId(): number {
     // Find the maximum ID in the current data
-    const maxId = Math.max(...this.listaPersonas.map((p) => p.idPersona), 0);
+    const maxId = Math.max(...this.listaPersonas.map((p) => p.idPersona));
 
     // Generate a new ID by incrementing the maximum ID
     return maxId + 1;
