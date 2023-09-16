@@ -4,5 +4,4 @@ export interface ReservaDeTurno {
   paciente: string; // Nombre del paciente
   fecha: Date; // Fecha de la reserva
   hora: string; // Horario de la reserva (por ejemplo, "09:00 - 10:00")
-  isEditable: boolean;
 }

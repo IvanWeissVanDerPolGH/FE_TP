@@ -74,7 +74,7 @@
       <th>Paciente</th>
       <th>Fecha</th>
       <th>Hora</th>
-      <th>Acciones</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -85,8 +85,6 @@
       <td>{{ reserva.hora }}</td>
       <td>
         <button (click)="cancelReserva(reserva.id)">Cancelar</button>
-        <button (click)="editReserva(i)">Editar</button>
-        <button *ngIf="isEditing[i]" (click)="updateReserva(reserva, i)">Actualizar</button>
       </td>
     </tr>
   </tbody>
