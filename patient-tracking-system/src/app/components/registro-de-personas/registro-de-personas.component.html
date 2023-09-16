@@ -54,8 +54,8 @@
       <th>Teléfono</th>
       <th>Email</th>
       <th>Cédula</th>
-      <th>Flag Es Doctor</th>
-      <th>Actions</th>
+      <th>Estatus</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -85,7 +85,8 @@
         <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.cedula">
       </td>
       <td>
-        <span *ngIf="!persona.isEditing">{{ persona.flag_es_doctor }}</span>
+        <span *ngIf="!persona.isEditing && persona.flag_es_doctor">Doctor</span>
+        <span *ngIf="!persona.isEditing && !persona.flag_es_doctor">Paciente</span>
         <input *ngIf="persona.isEditing" type="checkbox" [(ngModel)]="persona.flag_es_doctor">
       </td>
       <td>
