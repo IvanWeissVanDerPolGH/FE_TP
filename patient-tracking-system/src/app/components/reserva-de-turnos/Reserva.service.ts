@@ -77,15 +77,15 @@ export class ReservaService {
 
   // Add a new reservation
   addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
-    // Generate a unique ID for the new reservation
+    // Genera un ID unico para la reservacion
     reserva.id = this.generateNewId();
-
-    console.log(reserva)
-    // Push the new reservation to the array
+    //console.log(reserva)
+    // Carga la nueva reservacion al array
     this.reservas.push(reserva);
-    console.log(this.reservas)
+    //console.log(this.reservas)
 
-    return of(this.reservas);
+    //retorna el Observable con el arrray y el nuevo elemento
+    return of([...this.reservas]);
   }
 
   // Cancel a reservation by its ID
