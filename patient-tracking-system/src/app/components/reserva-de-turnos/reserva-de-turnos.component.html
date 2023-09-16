@@ -13,7 +13,7 @@
   <label for="dateHastaFilter">Fecha hasta:</label>
   <input type="date" id="dateHastaFilter" [(ngModel)]="filtros.fechaHasta" (input)="applyFilters()">
 
-  <button (click)="applyFilters()">Apply Filters</button> <!-- Add this button -->
+  <!-- <button (click)="applyFilters()">Apply Filters</button> Add this button -->
 </div>
 
 <!-- Formulario de Reserva -->
@@ -82,7 +82,7 @@
       <td>{{ reserva.doctor }}</td>
       <td>{{ reserva.paciente }}</td>
       <td>{{ reserva.fecha }}</td>
-      <td>{{ reserva.horario }}</td>
+      <td>{{ reserva.hora }}</td>
       <td>
         <button (click)="cancelReserva(reserva.id)">Cancelar</button>
         <button (click)="editReserva(i)">Editar</button>
