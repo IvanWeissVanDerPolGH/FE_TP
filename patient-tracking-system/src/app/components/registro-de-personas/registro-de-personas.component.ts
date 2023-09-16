@@ -1,6 +1,6 @@
 import { RegistroPersonaService } from 'src/app/components/registro-de-personas/registro-de-personas.service';
 import { Component, OnInit } from '@angular/core';
-import { RegistroPersona_interface } from './registro-de-personas.interface';
+import { RegistroPersona_interface as Persona } from './registro-de-personas.interface';
 
 
 
@@ -14,18 +14,18 @@ export class RegistroDePersonasComponent implements OnInit {
   apellidoFilter = '';
   filtroTipo = 'todos'; // Valor predeterminado para mostrar todos
 
-  newPersona: RegistroPersona_interface = {
+  newPersona: Persona = {
     idPersona: 0,
     nombre: '',
     apellido: '',
     telefono: '',
     email: '',
     cedula: '',
-    flag_es_doctor: false
+    flag_es_doctor: false,
+    isEditing: false
   };
-  filteredPersonas: RegistroPersona_interface[] = [];
-  listaDePersonas: RegistroPersona_interface[] = [];
-  isEditing: boolean[] = []; // Array to track editing state for each persona
+  filteredPersonas: Persona[] = [];
+  listaDePersonas: Persona[] = [];
 
   constructor(private personaService: RegistroPersonaService) {}
 
@@ -53,7 +53,6 @@ export class RegistroDePersonasComponent implements OnInit {
   loadPersonas(): void {
     this.personaService.getPersonas_sample().subscribe((personas) => {
       this.listaDePersonas = personas;
-      this.isEditing = new Array(personas.length).fill(false);
     });
     this.applyFilters();
   }
@@ -68,18 +67,19 @@ export class RegistroDePersonasComponent implements OnInit {
         telefono: '',
         email: '',
         cedula: '',
-        flag_es_doctor: false
+        flag_es_doctor: false,
+        isEditing: false
       };
     });
   }
 
-  editPersona(index: number): void {
-    this.isEditing[index] = true;
+  editPersona(persona: Persona): void {
+    persona.isEditing = true;
   }
 
-  updatePersona(persona: RegistroPersona_interface, index: number): void {
+  updatePersona(persona: Persona, index: number): void {
     this.personaService.updatePersona(persona).subscribe(() => {
-      this.isEditing[index] = false;
+      persona.isEditing = false;
       this.loadPersonas(); // Reload personas after updating
     });
   }
