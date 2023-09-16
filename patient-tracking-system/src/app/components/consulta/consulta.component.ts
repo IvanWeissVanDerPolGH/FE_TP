@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 
 
 export class ConsultaComponent implements OnInit{
-  newConsulta: Consulta = { idCategoria: -10, descripcion: '' ,isEditing: false}; // Initialize a new consultation
+  newConsulta: Consulta = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
   listaDeConsultas: Consulta[] = [];
 
   constructor(private ConsultaService: ConsultaService) {}
@@ -40,7 +40,7 @@ export class ConsultaComponent implements OnInit{
     this.ConsultaService.addConsulta(this.newConsulta).subscribe((updatedConsultas) => {
       // Optionally, you can handle the response here and update the list
       this.listaDeConsultas = updatedConsultas;
-      this.newConsulta = { idCategoria: -10, descripcion: '' ,isEditing: false}; // Clear the form
+      this.newConsulta = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Clear the form
       this.sortConsultasById();
     });
   }
