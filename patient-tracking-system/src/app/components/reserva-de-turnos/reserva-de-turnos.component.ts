@@ -80,7 +80,6 @@ export class ReservaDeTurnosComponent implements OnInit {
         this.reservaService.addReserva(this.nuevaReserva).subscribe(() => {
           // Reload the reservations with filters applied
           this.applyFilters();
-          console.log(this.nuevaReserva);
         });
       }
     }
