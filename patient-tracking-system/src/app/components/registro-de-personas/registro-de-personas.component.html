@@ -78,7 +78,7 @@
       </td>
       <td>
         <span *ngIf="!persona.isEditing">{{ persona.email }}</span>
-        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.email">
+        <input *ngIf="persona.isEditing" type="email" [(ngModel)]="persona.email">
       </td>
       <td>
         <span *ngIf="!persona.isEditing">{{ persona.cedula }}</span>
@@ -86,7 +86,7 @@
       </td>
       <td>
         <span *ngIf="!persona.isEditing">{{ persona.flag_es_doctor }}</span>
-        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.flag_es_doctor">
+        <input *ngIf="persona.isEditing" type="checkbox" [(ngModel)]="persona.flag_es_doctor">
       </td>
       <td>
         <button *ngIf="!persona.isEditing" (click)="editPersona(persona)">Edit</button>
