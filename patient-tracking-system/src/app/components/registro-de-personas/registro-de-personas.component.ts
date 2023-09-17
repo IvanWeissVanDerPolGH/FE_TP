@@ -2,8 +2,6 @@ import { RegistroPersonaService } from 'src/app/components/registro-de-personas/
 import { Component, OnInit } from '@angular/core';
 import { RegistroPersona_interface as Persona } from './registro-de-personas.interface';
 
-
-
 @Component({
   selector: 'app-registro-de-personas',
   templateUrl: './registro-de-personas.component.html',

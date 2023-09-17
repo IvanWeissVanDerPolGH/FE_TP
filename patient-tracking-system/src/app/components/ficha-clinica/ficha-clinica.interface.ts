@@ -1,8 +1,10 @@
 import { Categoria } from "../consulta/consulta.interface";
+import { ReservaDeTurno } from "../reserva-de-turnos/reserva-de-turnos.interface";
 
 export interface FichaClinica {
     id: number;
-    motivo: string;
+    motivoConsulta: string;
     diagnostico: string;
-    categoria: number;
+    reserva: ReservaDeTurno;
+    categoria: Categoria;
 }

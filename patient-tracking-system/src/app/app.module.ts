@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistroDePersonasComponent } from './components/registro-de-personas/registro-de-personas.component';
 import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva-de-turnos.component';
+import { FichaClinicaComponent } from './components/ficha-clinica/ficha-clinica.component';
 import { BodyComponent } from './body/body.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { FooterComponent } from './footer/footer.component';
@@ -22,6 +23,7 @@ import { FooterComponent } from './footer/footer.component';
     ConsultaComponent,
     RegistroDePersonasComponent,
     ReservaDeTurnosComponent,
+    FichaClinicaComponent,
     BodyComponent,
     SidenavComponent,
     FooterComponent

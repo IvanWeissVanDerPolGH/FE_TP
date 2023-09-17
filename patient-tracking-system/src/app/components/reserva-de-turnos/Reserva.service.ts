@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
+import { Categoria } from '../consulta/consulta.interface';
 
 export type ReservaDeTurnoFormateada = {
   fecha: string;
@@ -10,15 +11,14 @@ export type ReservaDeTurnoFormateada = {
   doctor: string;
   paciente: string;
   hora: string;
+  categoria: Categoria;
 }
-
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservaService {
-  private reservas: ReservaDeTurno[]
+  reservas: ReservaDeTurno[]
 
   constructor() {
     this.reservas = data_DatosDeReservas;// Initialize with example data
@@ -35,8 +35,6 @@ export class ReservaService {
   getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
     // Simulate filtering based on filters if needed
     let filteredReservas = this.reservas;
-
-    // parece que est mal la logica, no se esta pisando los valores de filtro.doctor cuando hace el filtro de filtro.fechaHasta?
 
     if (filtros.doctor) {
       filteredReservas = filteredReservas.filter((reserva) =>
@@ -70,6 +68,14 @@ export class ReservaService {
     return of(formattedReservas);
   }
 
+  //metodo para obtener la lista de categorias, usada para otros componentes
+  getAllReservas(): Observable<ReservaDeTurno[]>{
+    return new Observable<ReservaDeTurno[]>(observer => {
+      observer.next(this.reservas);
+      observer.complete();
+    });
+  }
+
   // Add a new reservation
   addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
     // Generate a unique ID for the new reservation
@@ -77,7 +83,7 @@ export class ReservaService {
 
     // Push the new reservation to the array
     this.reservas.push(reserva);
-
+    console.log(reserva);
     return of(this.reservas);
   }
 

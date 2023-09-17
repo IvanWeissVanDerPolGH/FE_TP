@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
 import { ReservaDeTurno } from './reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
-import { Observable, of } from 'rxjs';
-import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//Marco
-import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//para traer las personas desde registro-de-personas
+import { ConsultaService } from '../consulta/consulta.service';// para traer las categorias desde el registro de consultas
+import { Categoria } from '../consulta/consulta.interface';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -13,30 +14,43 @@ import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
 })
 export class ReservaDeTurnosComponent implements OnInit {
   reservasFormateadas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
-  personas: any[] = []; // Declaración de la propiedad personas//Marco
+  personas: Persona[] = [];                                 // Declaración de la propiedad personas
+  categorias: Categoria[] = [];                        //Arreglo para almacenar las categorias
   filtros: ReservaDeTurnoFiltro = {
     doctor: '',
     paciente: '',
     fechaDesde: '',
     fechaHasta: ''
   };
+  categoriaVacia: Categoria = {
+    isEditing: false,
+    id: 0,
+    descripcion: '',
+  }
   nuevaReserva: ReservaDeTurno = {
     id: 0,
     doctor: '',
     paciente: '',
     fecha: new Date(0),
-    hora: ''
+    hora: '',
+    categoria: this.categoriaVacia
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
 
-  constructor(private reservaService: ReservaService, private personaService: RegistroPersonaService) {}//Marco
+  //para usar la lista de personas y categorias
+  constructor(
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService,
+    private consultaService: ConsultaService
+    ) {}
 
   ngOnInit(): void {
     this.initReservas(); // Carga las reservas del día actual por defecto
     this.loadPersonas(); // Carga la lista de personas
+    this.loadCategorias();//Carga la lista de categorias
   }
 
-  //Marco
+  //Cargar las personas(Doctores y pacientes)
   loadPersonas(): void {
     this.personaService.getPersonas_sample().subscribe((personas) => {
       // Aquí puedes acceder a la lista de personas (doctores y pacientes)
@@ -44,10 +58,20 @@ export class ReservaDeTurnosComponent implements OnInit {
     });
   }
 
+    //Cargar las categorias
+  loadCategorias(): void {
+    this.consultaService.getCategorias().subscribe((categorias) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.categorias = categorias;
+    });
+  }
+  
+
   // Carga las reservas del día actual
   initReservas(): void {
     this.filtros.fechaDesde = this.reservaService.formattedDate(new Date());
     this.filtros.fechaHasta = this.reservaService.formattedDate(new Date());
+    
     // Llama al servicio para cargar las reservas con los filtros
     this.applyFilters();
   }
@@ -77,7 +101,8 @@ export class ReservaDeTurnosComponent implements OnInit {
             doctor: doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido,
             paciente: pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido,
             fecha: new Date(this.nuevaReserva.fecha + 'T00:00:00'),
-            hora: this.nuevaReserva.hora
+            hora: this.nuevaReserva.hora,
+            categoria: this.nuevaReserva.categoria
           };
 
           // Call the service to add the new reservation
@@ -100,4 +125,5 @@ export class ReservaDeTurnosComponent implements OnInit {
       this.applyFilters();
     });
   }
+
 }

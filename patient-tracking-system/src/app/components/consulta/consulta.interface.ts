@@ -1,5 +1,5 @@
 export interface Categoria {
   isEditing: boolean;
-  idCategoria: number;
+  id: number;
   descripcion: string;
 }

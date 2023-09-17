@@ -53,7 +53,6 @@
       <button type="submit" id="addReservationButton">Reservar</button>
     </form>
   </div>
-
   <!-- Filtros -->
   <div class="filters">
     <h2>Filtros</h2>
@@ -62,7 +61,6 @@
 
     <label for="pacienteFilter">Paciente:</label>
     <input type="text" id="pacienteFilter" [(ngModel)]="filtros.paciente" (input)="applyFilters()">
-
     <label for="dateDesdeFilter">Fecha desde:</label>
     <input type="date" id="dateDesdeFilter" [(ngModel)]="filtros.fechaDesde" (input)="applyFilters()">
 
