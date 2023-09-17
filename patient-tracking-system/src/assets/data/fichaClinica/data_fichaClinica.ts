@@ -71,7 +71,7 @@ export const Data_fichasClinicas: FichaClinica[] = [
       "motivoConsulta": "Mareos",
       "diagnostico": "Vértigo",
       "reserva": Reservas[124],
-      "categoria": Categoria[10]
+      "categoria": Categoria[0]
     },
     {
       "id": 11,
@@ -141,7 +141,7 @@ export const Data_fichasClinicas: FichaClinica[] = [
       "motivoConsulta": "Mareos",
       "diagnostico": "Vértigo",
       "reserva": Reservas[102],
-      "categoria": Categoria[10]
+      "categoria": Categoria[0]
     },
     {
       "id": 21,
@@ -211,6 +211,6 @@ export const Data_fichasClinicas: FichaClinica[] = [
       "motivoConsulta": "Mareos",
       "diagnostico": "Vértigo",
       "reserva": Reservas[34],
-      "categoria": Categoria[10]
+      "categoria": Categoria[0]
     }
   ]
