@@ -105,8 +105,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
-      <td>{{ fichaClinica.reserva.doctor }}</td>
-      <td>{{ fichaClinica.reserva.paciente }}</td>
+      <td>{{ fichaClinica.reserva.doctor.nombre }} {{fichaClinica.reserva.doctor.apellido}}</td>
+      <td>{{ fichaClinica.reserva.paciente.nombre }} {{fichaClinica.reserva.paciente.apellido}}</td>
       <td>{{ fichaClinica.reserva.fecha | date: "dd/MM/yyyy"}}</td>
       <td>{{ fichaClinica.reserva.hora }}</td>
       <td>{{ fichaClinica.motivoConsulta }}</td>
