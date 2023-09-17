@@ -23,6 +23,7 @@ body {
     box-shadow: 0 .25rem .5rem #e6edef;
     max-width: 900px;
     margin: 0 auto;
+    min-width: 250px;
 
     .card-gral-head {
         padding: 1rem 1.5rem;
