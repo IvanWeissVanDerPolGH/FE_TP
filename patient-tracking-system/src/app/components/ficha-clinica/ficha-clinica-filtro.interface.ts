@@ -1,3 +1,5 @@
+import { Categoria } from "../consulta/consulta.interface";
+
 export interface FichaClinicaFiltro {
     doctor: string; // Nombre del doctor
     paciente: string; // Nombre del paciente

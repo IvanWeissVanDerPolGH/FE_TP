@@ -1,47 +1,83 @@
 import { Component, OnInit } from '@angular/core';
-import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
-import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
-import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
 import { FichaClinicaService } from './ficha-clinica.service';
+import { FichaClinica } from './ficha-clinica.interface';
+import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
 import { Categoria } from '../consulta/consulta.interface';
+import { ReservaDeTurnosComponent } from '../reserva-de-turnos/reserva-de-turnos.component';
+import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
 
 @Component({
-    selector: 'app-ficha-clinica',
-    templateUrl: './ficha-clinica.component.html',
-    styleUrls: ['./ficha-clinica.component.css']
-  })
+  selector: 'app-ficha-clinica',
+  templateUrl: './ficha-clinica.component.html',
+  styleUrls: ['./ficha-clinica.component.css']
+})
 export class FichaClinicaComponent implements OnInit {
-    categorias: Categoria[] = [];
-    filtros:  FichaClinicaFiltro = {
-        doctor: '',
-        paciente: '',
-        fechaDesde: '',
-        fechaHasta: '',
-        categoria: 0
-    }
+  fichasClinicasFiltradas: FichaClinica[] = [];
+  reservasDeTurno: ReservaDeTurno[] = [];
+  categorias: Categoria[] = [];
+  filtros: FichaClinicaFiltro = {
+    doctor: '',
+    paciente: '',
+    fechaDesde: '',
+    fechaHasta: '',
+    categoria: 0,
+  };
 
-    constructor(
-        private fichaClinicaSercive: FichaClinicaService
-    ) {}
+  nuevaFichaClinica: FichaClinica = {
+    id: 0,
+    motivoConsulta: '',
+    diagnostico: '',
+    reserva: {
+      id: 0,
+      doctor: '',
+      paciente: '',
+      fecha: new Date(0),
+      hora: '',
+      categoria: { isEditing: false, id: 0, descripcion: '' },
+    },
+    categoria: { isEditing: false, id: 0, descripcion: '' },
+  };
 
-    ngOnInit(): void {
-        this.loadCategorias();
-        this.applyFilters();
-    }
+  constructor(
+    private fichaClinicaService: FichaClinicaService,
+    private reservas: ReservaDeTurnosComponent) {}
 
-    // Aplicar filtros y cargar las fichas
-    applyFilters(): void {
-        // Llama al servicio para cargar las reservas con los filtros
-        this.fichaClinicaSercive.getfichas(this.filtros).subscribe((reservasFormateadas) => {
-        this.reservasFormateadas = reservasFormateadas;
-      
-      });
-    }
+  ngOnInit(): void {
+    this.loadFichasClinicas();
+    this.loadCategorias();
+  }
 
-    loadCategorias(): void {
-        this.consultaService.getCategorias().subscribe((categorias) => {
-          // Aquí puedes acceder a la lista de categorias
-          this.categorias = categorias;
-        });
-      }
+  loadFichasClinicas(): void {
+    this.fichaClinicaService.getFichasClinicas(this.filtros).subscribe((fichasClinicas) => {
+      this.fichasClinicasFiltradas = fichasClinicas;
+    });
+  }
+
+  loadCategorias(): void {
+    // Load your Categoria data here (similar to loadFichasClinicas).
+  }
+
+  //agarra todas las reservas del componente reserva de turno component
+  loadReservas(): void {
+    this.reservasDeTurno = this.reservas.getAllReservas();
+  }
+
+  applyFilters(): void {
+    this.loadFichasClinicas();
+  }
+
+  agregarFichaClinica(): void {
+    const fichaClinica: FichaClinica = {
+      id: 0,
+      motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
+      diagnostico: this.nuevaFichaClinica.diagnostico,
+      reserva: this.nuevaFichaClinica.reserva,
+      categoria: this.nuevaFichaClinica.categoria
+    };
+
+    this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
+      // Reload the reservations with filters applied
+      this.applyFilters();
+    });
+  }
 }

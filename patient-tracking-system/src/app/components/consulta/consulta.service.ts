@@ -42,7 +42,7 @@ export class ConsultaService {
     // Update operation: Update a consultation by idCategoria
   updateConsulta(consultaToUpdate: Categoria): Observable<Categoria[]> {
     // Find the index of the consultation with the matching idCategoria
-    const index = this.listaDataConsulta.findIndex(consulta => consulta.idCategoria === consultaToUpdate.idCategoria);
+    const index = this.listaDataConsulta.findIndex(consulta => consulta.id === consultaToUpdate.id);
 
     if (index !== -1) {
       // If the consultation is found, update its properties

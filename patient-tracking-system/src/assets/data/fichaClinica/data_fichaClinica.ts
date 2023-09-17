@@ -1,187 +1,216 @@
 import { FichaClinica } from "src/app/components/ficha-clinica/ficha-clinica.interface"
-import { Categoria } from "src/app/components/consulta/consulta.interface"
-
+import { data_DatosDeReservas as Reservas } from "../reserva/data_reserva"
+import { Data_consulta as Categoria } from "../consulta/data_consulta";
 
 export const Data_fichasClinicas: FichaClinica[] = [
     {
       "id": 1,
-      "motivo": "Dolor de cabeza",
+      "motivoConsulta": "Dolor de cabeza",
       "diagnostico": "Migraña",
-      "categoria": 5
+      "reserva": Reservas[42],
+      "categoria": Categoria[5]
     },
     {
       "id": 2,
-      "motivo": "Fiebre",
+      "motivoConsulta": "Fiebre",
       "diagnostico": "Resfriado común",
-      "categoria": 3
+      "reserva": Reservas[108],
+      "categoria": Categoria[8]
     },
     {
       "id": 3,
-      "motivo": "Dolor abdominal",
+      "motivoConsulta": "Dolor abdominal",
       "diagnostico": "Apendicitis",
-      "categoria": 8
+      "reserva": Reservas[54],
+      "categoria": Categoria[2]
     },
     {
       "id": 4,
-      "motivo": "Fatiga",
+      "motivoConsulta": "Fatiga",
       "diagnostico": "Anemia",
-      "categoria": 6
+      "reserva": Reservas[92],
+      "categoria": Categoria[7]
     },
     {
       "id": 5,
-      "motivo": "Dolor en el pecho",
+      "motivoConsulta": "Dolor en el pecho",
       "diagnostico": "Infarto de miocardio",
-      "categoria": 9
+      "reserva": Reservas[154],
+      "categoria": Categoria[1]
     },
     {
       "id": 6,
-      "motivo": "Náuseas",
+      "motivoConsulta": "Náuseas",
       "diagnostico": "Gastritis",
-      "categoria": 4
+      "reserva": Reservas[66],
+      "categoria": Categoria[6]
     },
     {
       "id": 7,
-      "motivo": "Problemas respiratorios",
+      "motivoConsulta": "Problemas respiratorios",
       "diagnostico": "Asma",
-      "categoria": 7
+      "reserva": Reservas[37],
+      "categoria": Categoria[4]
     },
     {
       "id": 8,
-      "motivo": "Dolor de espalda",
+      "motivoConsulta": "Dolor de espalda",
       "diagnostico": "Hernia de disco",
-      "categoria": 2
+      "reserva": Reservas[174],
+      "categoria": Categoria[3]
     },
     {
       "id": 9,
-      "motivo": "Dolor de garganta",
+      "motivoConsulta": "Dolor de garganta",
       "diagnostico": "Amigdalitis",
-      "categoria": 1
+      "reserva": Reservas[50],
+      "categoria": Categoria[9]
     },
     {
       "id": 10,
-      "motivo": "Mareos",
+      "motivoConsulta": "Mareos",
       "diagnostico": "Vértigo",
-      "categoria": 10
+      "reserva": Reservas[124],
+      "categoria": Categoria[10]
     },
     {
-        "id": 11,
-        "motivo": "Dolor de cabeza",
-        "diagnostico": "Migraña",
-        "categoria": 5
-      },
-      {
-        "id": 12,
-        "motivo": "Fiebre",
-        "diagnostico": "Resfriado común",
-        "categoria": 3
-      },
-      {
-        "id": 13,
-        "motivo": "Dolor abdominal",
-        "diagnostico": "Apendicitis",
-        "categoria": 8
-      },
-      {
-        "id": 14,
-        "motivo": "Fatiga",
-        "diagnostico": "Anemia",
-        "categoria": 6
-      },
-      {
-        "id": 15,
-        "motivo": "Dolor en el pecho",
-        "diagnostico": "Infarto de miocardio",
-        "categoria": 9
-      },
-      {
-        "id": 16,
-        "motivo": "Náuseas",
-        "diagnostico": "Gastritis",
-        "categoria": 4
-      },
-      {
-        "id": 17,
-        "motivo": "Problemas respiratorios",
-        "diagnostico": "Asma",
-        "categoria": 7
-      },
-      {
-        "id": 18,
-        "motivo": "Dolor de espalda",
-        "diagnostico": "Hernia de disco",
-        "categoria": 2
-      },
-      {
-        "id": 19,
-        "motivo": "Dolor de garganta",
-        "diagnostico": "Amigdalitis",
-        "categoria": 1
-      },
-      {
-        "id": 20,
-        "motivo": "Mareos",
-        "diagnostico": "Vértigo",
-        "categoria": 10
-      },
-      {
-        "id": 21,
-        "motivo": "Dolor de cabeza",
-        "diagnostico": "Migraña",
-        "categoria": 5
-      },
-      {
-        "id": 22,
-        "motivo": "Fiebre",
-        "diagnostico": "Resfriado común",
-        "categoria": 3
-      },
-      {
-        "id": 23,
-        "motivo": "Dolor abdominal",
-        "diagnostico": "Apendicitis",
-        "categoria": 8
-      },
-      {
-        "id": 24,
-        "motivo": "Fatiga",
-        "diagnostico": "Anemia",
-        "categoria": 6
-      },
-      {
-        "id": 25,
-        "motivo": "Dolor en el pecho",
-        "diagnostico": "Infarto de miocardio",
-        "categoria": 9
-      },
-      {
-        "id": 26,
-        "motivo": "Náuseas",
-        "diagnostico": "Gastritis",
-        "categoria": 4
-      },
-      {
-        "id": 27,
-        "motivo": "Problemas respiratorios",
-        "diagnostico": "Asma",
-        "categoria": 7
-      },
-      {
-        "id": 28,
-        "motivo": "Dolor de espalda",
-        "diagnostico": "Hernia de disco",
-        "categoria": 2
-      },
-      {
-        "id": 29,
-        "motivo": "Dolor de garganta",
-        "diagnostico": "Amigdalitis",
-        "categoria": 1
-      },
-      {
-        "id": 30,
-        "motivo": "Mareos",
-        "diagnostico": "Vértigo",
-        "categoria": 10
-      }
+      "id": 11,
+      "motivoConsulta": "Dolor de cabeza",
+      "diagnostico": "Migraña",
+      "reserva": Reservas[33],
+      "categoria": Categoria[7]
+    },
+    {
+      "id": 12,
+      "motivoConsulta": "Fiebre",
+      "diagnostico": "Resfriado común",
+      "reserva": Reservas[172],
+      "categoria": Categoria[2]
+    },
+    {
+      "id": 13,
+      "motivoConsulta": "Dolor abdominal",
+      "diagnostico": "Apendicitis",
+      "reserva": Reservas[43],
+      "categoria": Categoria[5]
+    },
+    {
+      "id": 14,
+      "motivoConsulta": "Fatiga",
+      "diagnostico": "Anemia",
+      "reserva": Reservas[93],
+      "categoria": Categoria[8]
+    },
+    {
+      "id": 15,
+      "motivoConsulta": "Dolor en el pecho",
+      "diagnostico": "Infarto de miocardio",
+      "reserva": Reservas[114],
+      "categoria": Categoria[4]
+    },
+    {
+      "id": 16,
+      "motivoConsulta": "Náuseas",
+      "diagnostico": "Gastritis",
+      "reserva": Reservas[88],
+      "categoria": Categoria[1]
+    },
+    {
+      "id": 17,
+      "motivoConsulta": "Problemas respiratorios",
+      "diagnostico": "Asma",
+      "reserva": Reservas[0],
+      "categoria": Categoria[3]
+    },
+    {
+      "id": 18,
+      "motivoConsulta": "Dolor de espalda",
+      "diagnostico": "Hernia de disco",
+      "reserva": Reservas[142],
+      "categoria": Categoria[6]
+    },
+    {
+      "id": 19,
+      "motivoConsulta": "Dolor de garganta",
+      "diagnostico": "Amigdalitis",
+      "reserva": Reservas[116],
+      "categoria": Categoria[9]
+    },
+    {
+      "id": 20,
+      "motivoConsulta": "Mareos",
+      "diagnostico": "Vértigo",
+      "reserva": Reservas[102],
+      "categoria": Categoria[10]
+    },
+    {
+      "id": 21,
+      "motivoConsulta": "Dolor de cabeza",
+      "diagnostico": "Migraña",
+      "reserva": Reservas[129],
+      "categoria": Categoria[4]
+    },
+    {
+      "id": 22,
+      "motivoConsulta": "Fiebre",
+      "diagnostico": "Resfriado común",
+      "reserva": Reservas[49],
+      "categoria": Categoria[2]
+    },
+    {
+      "id": 23,
+      "motivoConsulta": "Dolor abdominal",
+      "diagnostico": "Apendicitis",
+      "reserva": Reservas[29],
+      "categoria": Categoria[8]
+    },
+    {
+      "id": 24,
+      "motivoConsulta": "Fatiga",
+      "diagnostico": "Anemia",
+      "reserva": Reservas[145],
+      "categoria": Categoria[7]
+    },
+    {
+      "id": 25,
+      "motivoConsulta": "Dolor en el pecho",
+      "diagnostico": "Infarto de miocardio",
+      "reserva": Reservas[195],
+      "categoria": Categoria[3]
+    },
+    {
+      "id": 26,
+      "motivoConsulta": "Náuseas",
+      "diagnostico": "Gastritis",
+      "reserva": Reservas[152],
+      "categoria": Categoria[9]
+    },
+    {
+      "id": 27,
+      "motivoConsulta": "Problemas respiratorios",
+      "diagnostico": "Asma",
+      "reserva": Reservas[168],
+      "categoria": Categoria[5]
+    },
+    {
+      "id": 28,
+      "motivoConsulta": "Dolor de espalda",
+      "diagnostico": "Hernia de disco",
+      "reserva": Reservas[24],
+      "categoria": Categoria[6]
+    },
+    {
+      "id": 29,
+      "motivoConsulta": "Dolor de garganta",
+      "diagnostico": "Amigdalitis",
+      "reserva": Reservas[165],
+      "categoria": Categoria[1]
+    },
+    {
+      "id": 30,
+      "motivoConsulta": "Mareos",
+      "diagnostico": "Vértigo",
+      "reserva": Reservas[34],
+      "categoria": Categoria[10]
+    }
   ]
-  

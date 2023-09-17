@@ -68,6 +68,10 @@ export class ReservaService {
     return of(formattedReservas);
   }
 
+  getAllReservas(): ReservaDeTurno[] {
+    return this.reservas;
+  }
+
   // Add a new reservation
   addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
     // Generate a unique ID for the new reservation

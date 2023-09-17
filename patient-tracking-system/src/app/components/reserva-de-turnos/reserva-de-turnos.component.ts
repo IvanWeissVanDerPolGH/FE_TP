@@ -24,7 +24,7 @@ export class ReservaDeTurnosComponent implements OnInit {
   };
   categoriaVacia: Categoria = {
     isEditing: false,
-    idCategoria: 0,
+    id: 0,
     descripcion: '',
   }
   nuevaReserva: ReservaDeTurno = {
@@ -124,5 +124,9 @@ export class ReservaDeTurnosComponent implements OnInit {
       // Actualiza la lista de reservas después de la cancelación
       this.applyFilters();
     });
+  }
+
+  getAllReservas(): ReservaDeTurno[] {
+    return this.reservaService.getAllReservas();
   }
 }

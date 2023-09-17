@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 
 
 export class ConsultaComponent implements OnInit{
-  newConsulta: Categoria = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
+  newConsulta: Categoria = { id: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
   listaDeConsultas: Categoria[] = [];
 
   constructor(private ConsultaService: ConsultaService) {}
@@ -22,9 +22,9 @@ export class ConsultaComponent implements OnInit{
   }
 
 
-  // Sort the listaDeConsultas array by idCategoria
+  // Sort the listaDeConsultas array by id
   sortConsultasById(): void {
-    this.listaDeConsultas.sort((a, b) => a.idCategoria - b.idCategoria);
+    this.listaDeConsultas.sort((a, b) => a.id - b.id);
   }
   // Read operation: Load the list of consultations
   loadConsultas(): void {
@@ -39,7 +39,7 @@ export class ConsultaComponent implements OnInit{
     this.ConsultaService.addConsulta(this.newConsulta).subscribe((updatedConsultas) => {
       // Optionally, you can handle the response here and update the list
       this.listaDeConsultas = updatedConsultas;
-      this.newConsulta = { idCategoria: -1, descripcion: '' ,isEditing: false}; // Clear the form
+      this.newConsulta = { id: -1, descripcion: '' ,isEditing: false}; // Clear the form
       this.sortConsultasById();
     });
   }
@@ -60,10 +60,10 @@ export class ConsultaComponent implements OnInit{
     });
   }
 
-  // Delete operation: Remove a consultation by idCategoria
-  deleteConsulta(idCategoria: number): Observable<Categoria[]> {
-    // Find the index of the consultation with the matching idCategoria
-    const index = this.listaDeConsultas.findIndex(consulta => consulta.idCategoria === idCategoria);
+  // Delete operation: Remove a consultation by id
+  deleteConsulta(id: number): Observable<Categoria[]> {
+    // Find the index of the consultation with the matching id
+    const index = this.listaDeConsultas.findIndex(consulta => consulta.id === id);
 
     if (index !== -1) {
       // If the consultation is found, remove it from the array
