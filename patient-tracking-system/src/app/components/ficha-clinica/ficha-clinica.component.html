@@ -30,7 +30,7 @@
     <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva">
       <option value="">Selecciona una reserva</option>
       <ng-container *ngFor="let reserva of reservasDeTurno">
-        <option [value]="reserva">{{ reserva.doctor }} - {{ reserva.paciente }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
+        <option [ngValue]="reserva">{{ reserva.doctor }} - {{ reserva.paciente }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
       </ng-container>
     </select>
 

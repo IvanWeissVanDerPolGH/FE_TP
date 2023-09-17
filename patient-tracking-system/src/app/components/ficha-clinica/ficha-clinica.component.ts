@@ -46,7 +46,7 @@ export class FichaClinicaComponent implements OnInit {
 
   ngOnInit(): void {
     this.initFichas();
-    // this.loadFichasClinicas();
+    this.initReservas();
     this.loadCategorias();
   }
 
@@ -57,6 +57,10 @@ export class FichaClinicaComponent implements OnInit {
     
     // Llama al servicio para cargar las reservas con los filtros
     this.loadFichasClinicas();
+  }
+
+  initReservas(): void {
+    this.loadReservas();
   }
 
   loadFichasClinicas(): void {
