@@ -48,7 +48,7 @@
   <form (ngSubmit)="addConsulta()" #consultaForm="ngForm" class="consulta-form">
     <div class="form-group">
       <label for="idCategoria">ID de Categoría:</label>
-      <input type="number" id="idCategoria" name="idCategoria" [(ngModel)]="newConsulta.idCategoria" required>
+      <input type="number" id="idCategoria" name="idCategoria" [(ngModel)]="newConsulta.id" required>
     </div>
     <div class="form-group">
       <label for="descripcion">Descripción:</label>
@@ -68,8 +68,8 @@
     <tbody>
       <tr *ngFor="let consulta of listaDeConsultas; let i = index">
         <td>
-          <span *ngIf="!consulta.isEditing">{{ consulta.idCategoria }}</span>
-          <input *ngIf="consulta.isEditing" type="number" [(ngModel)]="consulta.idCategoria" class="form-control">
+          <span *ngIf="!consulta.isEditing">{{ consulta.id }}</span>
+          <input *ngIf="consulta.isEditing" type="number" [(ngModel)]="consulta.id" class="form-control">
         </td>
         <td>
           <span *ngIf="!consulta.isEditing">{{ consulta.descripcion }}</span>
@@ -78,7 +78,7 @@
         <td>
           <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)" class="btn btn-info">Edit</button>
           <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)" class="btn btn-success">Update</button>
-          <button (click)="deleteConsulta(consulta.idCategoria)" class="btn btn-danger">Delete</button>
+          <button (click)="deleteConsulta(consulta.id)" class="btn btn-danger">Delete</button>
         </td>
       </tr>
     </tbody>
