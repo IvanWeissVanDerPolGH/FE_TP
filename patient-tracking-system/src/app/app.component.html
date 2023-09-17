@@ -13,5 +13,11 @@
 
 <main>
   <!-- The router-outlet is a placeholder for displaying the current route's component -->
+  <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+  <app-body
+    [collapsed] = "isSideNavCollapsed"
+    [screenWidth] = "screenWidth"
+  >
+  </app-body>
   <router-outlet></router-outlet>
 </main>

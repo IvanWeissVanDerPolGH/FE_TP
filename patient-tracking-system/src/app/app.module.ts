@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RegistroDePersonasComponent } from './components/registro-de-personas/registro-de-personas.component';
 import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva-de-turnos.component';
 import { FichaClinicaComponent } from './components/ficha-clinica/ficha-clinica.component';
+import { BodyComponent } from './body/body.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { FichaClinicaComponent } from './components/ficha-clinica/ficha-clinica.
     ConsultaComponent,
     RegistroDePersonasComponent,
     ReservaDeTurnosComponent,
-    FichaClinicaComponent
+    FichaClinicaComponent,
+    BodyComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,
