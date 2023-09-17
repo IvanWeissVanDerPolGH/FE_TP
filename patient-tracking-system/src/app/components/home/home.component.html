@@ -1,8 +1,21 @@
-<div class="card">
-  <div class="card-head">
-    <h1>Welcome to the Home Page</h1>
+<div class="card-gral">
+  <div class="card-gral-head">
+    <h1 class="titulo"> {{bienvenida}} </h1>
   </div>
-  <div class="card-body">
-
+  <div class="card-container">
+    <div class="card" *ngFor="let item of cardList,let i = index" [routerLink]="item.routelink">
+      <!-- Inicio de la lista de cartas -->
+      <div class="card-body">
+        <div class="card-head">
+          <i class="{{item.icon}} "></i>
+        </div>
+        <h5 class="card-title">{{item.title}}</h5>
+        <p class="card-text">{{item.description}}</p>
+        <!-- No es necesario el botón "Ver más" -->
+      </div>
+      <!-- Fin de la lista de cartas -->
+      <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
+    </div>
   </div>
 </div>
+
