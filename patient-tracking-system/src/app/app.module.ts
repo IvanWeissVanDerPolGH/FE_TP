@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RegistroDePersonasComponent } from './components/registro-de-personas/registro-de-personas.component';
 import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva-de-turnos.component';
+import { BodyComponent } from './body/body.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva
     HomeComponent,
     ConsultaComponent,
     RegistroDePersonasComponent,
-    ReservaDeTurnosComponent
+    ReservaDeTurnosComponent,
+    BodyComponent,
+    SidenavComponent
   ],
   imports: [
     BrowserModule,

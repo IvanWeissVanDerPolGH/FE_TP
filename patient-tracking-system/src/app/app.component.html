@@ -1,16 +1,14 @@
 <header>
-  <nav>
-    <ul>
-      <li><a [routerLink]="['']">Home</a></li>
-      <li><a [routerLink]="['/consultas']">Categorias de Consultas</a></li>
-      <li><a [routerLink]="['/registroDePersonas']">Registro De Personas</a></li>
-      <li><a [routerLink]="['/reserva-de-turnos']">Reserva de Turnos</a></li>
-      <!-- Add more navigation links as needed -->
-    </ul>
-  </nav>
+
 </header>
 
 <main>
   <!-- The router-outlet is a placeholder for displaying the current route's component -->
+  <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+  <app-body
+    [collapsed] = "isSideNavCollapsed"
+    [screenWidth] = "screenWidth"
+  >
+  </app-body>
   <router-outlet></router-outlet>
 </main>
