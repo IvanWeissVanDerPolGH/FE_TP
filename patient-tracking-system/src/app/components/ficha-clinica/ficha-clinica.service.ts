@@ -28,12 +28,12 @@ export class FichaClinicaService {
 
     if (filtros.doctor) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.doctor.toLowerCase().includes(filtros.doctor.toLowerCase())
+        ficha.doctor.nombre.toLowerCase().concat(' ',ficha.doctor.apellido.toLowerCase()).includes(filtros.doctor.toLowerCase())
       );
     }
     if (filtros.paciente) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.paciente.toLowerCase().includes(filtros.paciente.toLowerCase())
+      ficha.paciente.nombre.toLowerCase().concat(' ',ficha.paciente.apellido.toLowerCase()).includes(filtros.paciente.toLowerCase())
       );
     }
     if (filtros.fechaDesde) {

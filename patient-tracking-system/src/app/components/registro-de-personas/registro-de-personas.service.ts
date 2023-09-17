@@ -15,7 +15,7 @@ export class RegistroPersonaService {
   }
 
   // Read operation: Get the list of personas
-  getPersonas_sample(): Observable<Persona[]> {
+  getPersonas(): Observable<Persona[]> {
     // You can return the list of personas directly or fetch from an API if needed
     return new Observable<Persona[]>((observer) => {
       observer.next(this.personas);

@@ -27,10 +27,20 @@ export class ReservaDeTurnosComponent implements OnInit {
     id: 0,
     descripcion: '',
   }
+  personaVacia: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  }
   nuevaReserva: ReservaDeTurno = {
     id: 0,
-    doctor: '',
-    paciente: '',
+    doctor: this.personaVacia,
+    paciente: this.personaVacia,
     fecha: new Date(0),
     hora: '',
     categoria: this.categoriaVacia
@@ -52,7 +62,7 @@ export class ReservaDeTurnosComponent implements OnInit {
 
   //Cargar las personas(Doctores y pacientes)
   loadPersonas(): void {
-    this.personaService.getPersonas_sample().subscribe((personas) => {
+    this.personaService.getPersonas().subscribe((personas) => {
       // Aquí puedes acceder a la lista de personas (doctores y pacientes)
       this.personas = personas;
     });
@@ -89,17 +99,17 @@ export class ReservaDeTurnosComponent implements OnInit {
     // Check if the required fields are not empty
     if (this.nuevaReserva.fecha && this.nuevaReserva.hora) {
       // Buscar el Doctor seleccionado en la lista de personas
-      let doctorSeleccionado = this.personas.find(persona => persona.nombre + ' ' + persona.apellido === this.nuevaReserva.doctor);
+      let doctorSeleccionado = this.personas.find(persona => persona === this.nuevaReserva.doctor);
       // Buscar el Paciente seleccionado en la lista de personas
-      let pacienteSeleccionado = this.personas.find(persona => persona.nombre + ' ' + persona.apellido === this.nuevaReserva.paciente);
+      let pacienteSeleccionado = this.personas.find(persona => persona === this.nuevaReserva.paciente);
 
         // Verificar si se encontraron el Doctor y el Paciente
         if (doctorSeleccionado && pacienteSeleccionado) {
           // Crear una nueva instancia de ReservaDeTurno
           const nuevaReserva: ReservaDeTurno = {
             id: 0,
-            doctor: doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido,
-            paciente: pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido,
+            doctor: doctorSeleccionado,
+            paciente: pacienteSeleccionado,
             fecha: new Date(this.nuevaReserva.fecha + 'T00:00:00'),
             hora: this.nuevaReserva.hora,
             categoria: this.nuevaReserva.categoria

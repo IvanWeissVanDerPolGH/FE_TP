@@ -38,12 +38,12 @@ export class ReservaService {
 
     if (filtros.doctor) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.doctor.toLowerCase().includes(filtros.doctor.toLowerCase())
+        reserva.doctor.nombre.toLowerCase().concat(' ',reserva.doctor.apellido.toLowerCase()).includes(filtros.doctor.toLowerCase())
       );
     }
     if (filtros.paciente) {
       filteredReservas = filteredReservas.filter((reserva) =>
-        reserva.paciente.toLowerCase().includes(filtros.paciente.toLowerCase())
+      reserva.paciente.nombre.toLowerCase().concat(' ',reserva.paciente.apellido.toLowerCase()).includes(filtros.paciente.toLowerCase())
       );
     }
     if (filtros.fechaDesde) {
@@ -58,10 +58,12 @@ export class ReservaService {
     }
 
     // Format the 'fecha' property using Angular's formatDate
-    const formattedReservas = filteredReservas.map((reserva) => {
+    let formattedReservas: ReservaDeTurnoFormateada[]  = filteredReservas.map((reserva) => {
       return {
         ...reserva,
         fecha: this.formattedDate(reserva.fecha), // Format the 'fecha' property
+        doctor: (reserva.doctor.nombre + " " + reserva.doctor.apellido),
+        paciente: (reserva.paciente.nombre + " " + reserva.paciente.apellido)
       };
     });
 

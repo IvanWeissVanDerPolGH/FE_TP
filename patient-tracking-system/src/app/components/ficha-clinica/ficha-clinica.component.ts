@@ -6,6 +6,9 @@ import { Categoria } from '../consulta/consulta.interface';
 import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
 import { ReservaService } from '../reserva-de-turnos/Reserva.service';
 import { ConsultaService } from '../consulta/consulta.service';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';
+
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -16,6 +19,9 @@ export class FichaClinicaComponent implements OnInit {
   fichasClinicasFiltradas: FichaClinica[] = [];
   reservasDeTurno: ReservaDeTurno[] = [];
   categorias: Categoria[] = [];
+  personas: Persona[] = [];
+  doctores: Persona[] = [];
+  pacientes: Persona[] = [];
   filtros: FichaClinicaFiltro = {
     doctor: '',
     paciente: '',
@@ -23,15 +29,26 @@ export class FichaClinicaComponent implements OnInit {
     fechaHasta: '',
     categoria: 0,
   };
-
+  personaVacia: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  };
   nuevaFichaClinica: FichaClinica = {
     id: 0,
+    paciente: this.personaVacia,
+    doctor: this.personaVacia,
     motivoConsulta: '',
     diagnostico: '',
     reserva: {
       id: 0,
-      doctor: '',
-      paciente: '',
+      doctor: this.personaVacia,
+      paciente: this.personaVacia,
       fecha: new Date(0),
       hora: '',
       categoria: { isEditing: false, id: 0, descripcion: '' },
@@ -42,12 +59,14 @@ export class FichaClinicaComponent implements OnInit {
   constructor(
     private fichaClinicaService: FichaClinicaService,
     private categoriaService: ConsultaService,
-    private reservas: ReservaService) {}
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService) {}
 
   ngOnInit(): void {
     this.initFichas();
     this.initReservas();
     this.loadCategorias();
+    this.loadPersonas();
   }
 
   // Carga las reservas del día actual
@@ -78,25 +97,58 @@ export class FichaClinicaComponent implements OnInit {
 
   //agarra todas las reservas del componente reserva de turno component
   loadReservas(): void {
-    this.reservas.getAllReservas().subscribe((reservas) => {
+    this.reservaService.getAllReservas().subscribe((reservas) => {
       // Aquí puedes acceder a la lista de categorias
       this.reservasDeTurno = reservas;
     });
+  }
+
+  loadPersonas(): void {
+    this.personaService.getPersonas().subscribe((persona) => {
+      this.personas = persona
+    })
+
+    this.doctores = this.personas.filter((persona) => {
+      persona.flag_es_doctor == true
+    })
+
+    this.pacientes = this.personas.filter((persona) => {
+      persona.flag_es_doctor == false
+    })
   }
 
   applyFilters(): void {
     this.loadFichasClinicas();
   }
 
-  agregarFichaClinica(): void {
+  agregarFichaClinicaConReserva(): void {
     const fichaClinica: FichaClinica = {
       id: 0,
+      paciente: this.nuevaFichaClinica.reserva.paciente,
+      doctor: this.nuevaFichaClinica.reserva.doctor,
       motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
       diagnostico: this.nuevaFichaClinica.diagnostico,
       reserva: this.nuevaFichaClinica.reserva,
       categoria: this.nuevaFichaClinica.categoria
     };
 
+    this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
+      // Reload the reservations with filters applied
+      this.applyFilters();
+    });
+  }
+
+  agregarFichaClinica(): void {
+    const fichaClinica: FichaClinica = {
+      id: 0,
+      paciente: this.nuevaFichaClinica.reserva.paciente,
+      doctor: this.nuevaFichaClinica.reserva.doctor,
+      motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
+      diagnostico: this.nuevaFichaClinica.diagnostico,
+      reserva: this.nuevaFichaClinica.reserva,
+      categoria: this.nuevaFichaClinica.categoria
+    };
+  
     this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
       // Reload the reservations with filters applied
       this.applyFilters();
