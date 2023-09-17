@@ -3,8 +3,10 @@ import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
 import { ReservaDeTurno } from './reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
 import { Observable, of } from 'rxjs';
-import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//Marco
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//para traer las personas desde registro-de-personas
+import { ConsultaService } from '../consulta/consulta.service';// para traer las categorias desde el registro de consultas
 import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
+import { Categoria } from '../consulta/consulta.interface';
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -13,7 +15,8 @@ import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
 })
 export class ReservaDeTurnosComponent implements OnInit {
   reservasFormateadas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
-  personas: any[] = []; // Declaración de la propiedad personas//Marco
+  personas: any[] = [];                                 // Declaración de la propiedad personas
+  categorias: Categoria[] = [];                        //Arreglo para almacenar las categorias
   filtros: ReservaDeTurnoFiltro = {
     doctor: '',
     paciente: '',
@@ -25,24 +28,40 @@ export class ReservaDeTurnosComponent implements OnInit {
     doctor: '',
     paciente: '',
     fecha: new Date(0),
-    hora: ''
+    hora: '',
+    categoria: new this.Categoria()
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
 
-  constructor(private reservaService: ReservaService, private personaService: RegistroPersonaService) {}//Marco
+  //para usar la lista de personas y categorias
+  constructor(
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService,
+    private consultaService: ConsultaService
+    ) {}
 
   ngOnInit(): void {
     this.initReservas(); // Carga las reservas del día actual por defecto
     this.loadPersonas(); // Carga la lista de personas
+    this.loadCategorias();//Carga la lista de categorias
   }
 
-  //Marco
+  //Cargar las personas(Doctores y pacientes)
   loadPersonas(): void {
     this.personaService.getPersonas_sample().subscribe((personas) => {
       // Aquí puedes acceder a la lista de personas (doctores y pacientes)
       this.personas = personas;
     });
   }
+
+    //Cargar las categorias
+    loadCategorias(): void {
+      this.consultaService.getCategorias().subscribe((categorias) => {
+        // Aquí puedes acceder a la lista de categorias
+        this.categorias = categorias;
+      });
+    }
+  
 
   // Carga las reservas del día actual
   initReservas(): void {
@@ -77,7 +96,8 @@ export class ReservaDeTurnosComponent implements OnInit {
             doctor: doctorSeleccionado.nombre + ' ' + doctorSeleccionado.apellido,
             paciente: pacienteSeleccionado.nombre + ' ' + pacienteSeleccionado.apellido,
             fecha: new Date(this.nuevaReserva.fecha + 'T00:00:00'),
-            hora: this.nuevaReserva.hora
+            hora: this.nuevaReserva.hora,
+            categoria: this.nuevaReserva.categoria
           };
 
           // Call the service to add the new reservation

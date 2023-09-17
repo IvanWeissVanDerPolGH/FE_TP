@@ -77,7 +77,7 @@ export class ReservaService {
 
     // Push the new reservation to the array
     this.reservas.push(reserva);
-
+    console.log(reserva);
     return of(this.reservas);
   }
 

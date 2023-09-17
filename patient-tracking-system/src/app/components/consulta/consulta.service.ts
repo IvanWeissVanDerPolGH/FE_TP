@@ -22,6 +22,11 @@ export class ConsultaService {
     });
   }
 
+  //metodo para obtener la lista de categorias, usada para otros componentes
+  getCategorias(): Observable<Categoria[]>{
+      return this.getConsultas_sample();
+  }
+
     // Create operation: Add a new consultation
     addConsulta(consulta: Categoria): Observable<Categoria[]> {
 

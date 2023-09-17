@@ -22,7 +22,7 @@
   <form (submit)="reservarTurno()">
     <label for="doctor">Doctor:</label>
       <!-- <input type="text" id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor"> -->
-      <!-- Marco -->
+      <!-- Lista desplegrable de doctores -->
       <select id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor">
         <option value="">Selecciona un doctor</option>
         <ng-container *ngFor="let persona of personas">
@@ -34,7 +34,7 @@
 
     <label for="paciente">Pacientes:</label>
     <!-- <input type="text" id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="pacient"> -->
-    <!-- Marco -->
+    <!-- Lista desplegable de Pacientes -->
     <select id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="paciente">
       <option value="">Selecciona un paciente</option>
       <ng-container *ngFor="let persona of personas">
@@ -43,6 +43,16 @@
         </ng-container>
       </ng-container>
     </select>
+
+    <!--Lista desplegable de Categorias-->
+    <label for="categoria">Categoría:</label>
+    <select id="reservanueva_categoria" [(ngModel)]="nuevaReserva.categoria" name="categoria">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [value]="categoria.descripcion">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+    
 
     <label for="date">Fecha:</label>
     <input type="date" id="reservanueva_date" [(ngModel)]="nuevaReserva.fecha" name="date">
