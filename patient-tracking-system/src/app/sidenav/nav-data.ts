@@ -21,7 +21,13 @@ export const navbarData = [
     routelink: 'reserva-de-turnos',
     icon: 'fal fa-pen-nib',
     label: 'Reserva de Turnos'
+  },
+  {
+    routelink: 'ficha-clinica',
+    icon: 'fal fa-list',
+    label: 'Ficha Clinica'
   }
+
 
 
 
