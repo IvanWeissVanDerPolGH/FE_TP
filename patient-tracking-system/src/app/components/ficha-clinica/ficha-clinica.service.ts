@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { FichaClinica } from './ficha-clinica.interface'; // Import the FichaClinica interface
 import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
 import { Data_fichasClinicas } from 'src/assets/data/fichaClinica/data_fichaClinica';
-import { ReservaService } from '../reserva-de-turnos/Reserva.service';
+
 @Injectable({
   providedIn: 'root'
 })

@@ -3,8 +3,9 @@ import { FichaClinicaService } from './ficha-clinica.service';
 import { FichaClinica } from './ficha-clinica.interface';
 import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
 import { Categoria } from '../consulta/consulta.interface';
-import { ReservaDeTurnosComponent } from '../reserva-de-turnos/reserva-de-turnos.component';
 import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
+import { ReservaService } from '../reserva-de-turnos/Reserva.service';
+import { ConsultaService } from '../consulta/consulta.service';
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -40,7 +41,8 @@ export class FichaClinicaComponent implements OnInit {
 
   constructor(
     private fichaClinicaService: FichaClinicaService,
-    private reservas: ReservaDeTurnosComponent) {}
+    private categoriaService: ConsultaService,
+    private reservas: ReservaService) {}
 
   ngOnInit(): void {
     this.loadFichasClinicas();
@@ -54,12 +56,18 @@ export class FichaClinicaComponent implements OnInit {
   }
 
   loadCategorias(): void {
-    // Load your Categoria data here (similar to loadFichasClinicas).
+    this.categoriaService.getCategorias().subscribe((categorias) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.categorias = categorias;
+    });
   }
 
   //agarra todas las reservas del componente reserva de turno component
   loadReservas(): void {
-    this.reservasDeTurno = this.reservas.getAllReservas();
+    this.reservas.getAllReservas().subscribe((reservas) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.reservasDeTurno = reservas;
+    });
   }
 
   applyFilters(): void {

@@ -126,7 +126,4 @@ export class ReservaDeTurnosComponent implements OnInit {
     });
   }
 
-  getAllReservas(): ReservaDeTurno[] {
-    return this.reservaService.getAllReservas();
-  }
 }

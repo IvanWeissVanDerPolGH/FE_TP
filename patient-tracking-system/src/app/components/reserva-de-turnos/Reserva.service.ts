@@ -68,8 +68,12 @@ export class ReservaService {
     return of(formattedReservas);
   }
 
-  getAllReservas(): ReservaDeTurno[] {
-    return this.reservas;
+  //metodo para obtener la lista de categorias, usada para otros componentes
+  getAllReservas(): Observable<ReservaDeTurno[]>{
+    return new Observable<ReservaDeTurno[]>(observer => {
+      observer.next(this.reservas);
+      observer.complete();
+    });
   }
 
   // Add a new reservation
