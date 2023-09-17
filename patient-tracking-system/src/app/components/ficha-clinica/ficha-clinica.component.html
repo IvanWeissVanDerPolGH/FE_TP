@@ -30,7 +30,7 @@
     <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva">
       <option value="">Selecciona una reserva</option>
       <ng-container *ngFor="let reserva of reservasDeTurno">
-        <option [value]="reserva">{{ reserva.doctor }} - {{ reserva.paciente }} - {{ reserva.fecha | date: "dd/mm/yyyy" }} - {{ reserva.hora }}</option>
+        <option [value]="reserva">{{ reserva.doctor }} - {{ reserva.paciente }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
       </ng-container>
     </select>
 
@@ -44,7 +44,7 @@
     <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria">
       <option value="">Selecciona una categoría</option>
       <ng-container *ngFor="let categoria of categorias">
-        <option [value]="categoria.descripcion">{{ categoria.descripcion }}</option>
+        <option [ngValue]="categoria">{{ categoria.descripcion }}</option>
       </ng-container>
     </select>
 
@@ -70,7 +70,7 @@
     <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
       <td>{{ fichaClinica.reserva.doctor }}</td>
       <td>{{ fichaClinica.reserva.paciente }}</td>
-      <td>{{ fichaClinica.reserva.fecha }}</td>
+      <td>{{ fichaClinica.reserva.fecha | date: "dd/MM/yyyy"}}</td>
       <td>{{ fichaClinica.reserva.hora }}</td>
       <td>{{ fichaClinica.motivoConsulta }}</td>
       <td>{{ fichaClinica.diagnostico }}</td>
