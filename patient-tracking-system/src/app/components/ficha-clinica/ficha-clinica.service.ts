@@ -14,6 +14,13 @@ export class FichaClinicaService {
     this.fichasClinicas = Data_fichasClinicas;
   }
 
+  formattedDate(date: Date){
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0
+    let yyyy = date.getFullYear();
+    return yyyy + '/' + mm + '/' + dd;
+  }
+
   // Get a list of fichas clínicas based on filters
   getFichasClinicas(filtros: FichaClinicaFiltro): Observable<FichaClinica[]> {
     // Simulate filtering based on filters if needed
@@ -31,17 +38,17 @@ export class FichaClinicaService {
     }
     if (filtros.fechaDesde) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.fecha >= new Date(filtros.fechaDesde)
+        ficha.reserva.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
       );
     }
     if (filtros.fechaHasta) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.fecha <= new Date(filtros.fechaHasta)
+        ficha.reserva.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
       );
     }
     if (filtros.categoria) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.categoria.id === filtros.categoria
+        ficha.categoria.id === +filtros.categoria
       );
     }
 

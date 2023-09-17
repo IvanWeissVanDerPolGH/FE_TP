@@ -45,8 +45,18 @@ export class FichaClinicaComponent implements OnInit {
     private reservas: ReservaService) {}
 
   ngOnInit(): void {
-    this.loadFichasClinicas();
+    this.initFichas();
+    // this.loadFichasClinicas();
     this.loadCategorias();
+  }
+
+  // Carga las reservas del día actual
+  initFichas(): void {
+    this.filtros.fechaDesde = this.fichaClinicaService.formattedDate(new Date());
+    this.filtros.fechaHasta = this.fichaClinicaService.formattedDate(new Date());
+    
+    // Llama al servicio para cargar las reservas con los filtros
+    this.loadFichasClinicas();
   }
 
   loadFichasClinicas(): void {
