@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
 import { ReservaDeTurno } from './reserva-de-turnos.interface';
 import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
-import { Observable, of } from 'rxjs';
 import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//para traer las personas desde registro-de-personas
 import { ConsultaService } from '../consulta/consulta.service';// para traer las categorias desde el registro de consultas
-import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
 import { Categoria } from '../consulta/consulta.interface';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
 
 @Component({
   selector: 'app-reserva-de-turnos',
@@ -15,7 +14,7 @@ import { Categoria } from '../consulta/consulta.interface';
 })
 export class ReservaDeTurnosComponent implements OnInit {
   reservasFormateadas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
-  personas: any[] = [];                                 // Declaración de la propiedad personas
+  personas: Persona[] = [];                                 // Declaración de la propiedad personas
   categorias: Categoria[] = [];                        //Arreglo para almacenar las categorias
   filtros: ReservaDeTurnoFiltro = {
     doctor: '',
@@ -23,13 +22,18 @@ export class ReservaDeTurnosComponent implements OnInit {
     fechaDesde: '',
     fechaHasta: ''
   };
+  categoriaVacia: Categoria = {
+    isEditing: false,
+    idCategoria: 0,
+    descripcion: '',
+  }
   nuevaReserva: ReservaDeTurno = {
     id: 0,
     doctor: '',
     paciente: '',
     fecha: new Date(0),
     hora: '',
-    categoria: new this.Categoria()
+    categoria: this.categoriaVacia
   };
   isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
 
@@ -55,18 +59,19 @@ export class ReservaDeTurnosComponent implements OnInit {
   }
 
     //Cargar las categorias
-    loadCategorias(): void {
-      this.consultaService.getCategorias().subscribe((categorias) => {
-        // Aquí puedes acceder a la lista de categorias
-        this.categorias = categorias;
-      });
-    }
+  loadCategorias(): void {
+    this.consultaService.getCategorias().subscribe((categorias) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.categorias = categorias;
+    });
+  }
   
 
   // Carga las reservas del día actual
   initReservas(): void {
     this.filtros.fechaDesde = this.reservaService.formattedDate(new Date());
     this.filtros.fechaHasta = this.reservaService.formattedDate(new Date());
+    
     // Llama al servicio para cargar las reservas con los filtros
     this.applyFilters();
   }
