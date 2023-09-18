@@ -9,6 +9,7 @@
         <!-- <input type="text" id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor"> -->
         <!-- Marco -->
         <select id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor">
+          <option value="" disabled selected>Selecciona un doctor</option>
           <!--<option unselectable value="">Selecciona un doctor</option>-->
           <ng-container *ngFor="let persona of personas">
             <ng-container *ngIf="persona.flag_es_doctor">
@@ -22,6 +23,7 @@
       <!-- Lista desplegable de Pacientes -->
 
       <select id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="paciente">
+        <option value="" disabled selected>Selecciona un paciente</option>
         <!--<option value="">Selecciona un paciente</option> -->
         <ng-container *ngFor="let persona of personas">
           <ng-container *ngIf="!persona.flag_es_doctor">
@@ -34,6 +36,7 @@
 
       <label for="hora">Hora:</label>
       <select id="reservanueva_timeName" [(ngModel)]="nuevaReserva.hora" name="time">
+        <option value="" disabled selected>Selecciona una hora</option>
         <!--<option unselectable value="">Selecciona una hora</option>-->
         <!-- Opciones para seleccionar la hora -->
         <option value="09:00 - 10:00">09:00 - 10:00</option>
