@@ -11,6 +11,7 @@ import { RegistroPersonaService } from '../registro-de-personas/registro-de-pers
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { sort } from 'ramda';
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -57,7 +58,7 @@ export class FichaClinicaComponent implements OnInit {
     },
     categoria: { isEditing: false, id: 0, descripcion: '' },
   };
-
+  
   constructor(
     private fichaClinicaService: FichaClinicaService,
     private categoriaService: ConsultaService,
@@ -100,6 +101,8 @@ export class FichaClinicaComponent implements OnInit {
   //agarra todas las reservas del componente reserva de turno component
   loadReservas(): void {
     this.reservaService.getAllReservas().subscribe((reservas) => {
+      //ordenar por fecha
+      reservas.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
       // Aquí puedes acceder a la lista de categorias
       this.reservasDeTurno = reservas;
     });
