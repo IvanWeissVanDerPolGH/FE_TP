@@ -8,6 +8,7 @@ export interface FichaClinica {
     doctor: Persona;
     motivoConsulta: string;
     diagnostico: string;
+    fecha: Date,
     reserva: ReservaDeTurno;
     categoria: Categoria;
 }

@@ -38,12 +38,12 @@ export class FichaClinicaService {
     }
     if (filtros.fechaDesde) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
+        ficha.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
       );
     }
     if (filtros.fechaHasta) {
       filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
-        ficha.reserva.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
+        ficha.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
       );
     }
     if (filtros.categoria) {

@@ -30,7 +30,7 @@
     <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva">
       <option value="">Selecciona una reserva</option>
       <ng-container *ngFor="let reserva of reservasDeTurno">
-        <option [ngValue]="reserva">{{ reserva.doctor }} - {{ reserva.paciente }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
+        <option [ngValue]="reserva">{{ reserva.doctor.nombre }} {{ reserva.doctor.apellido }} - {{ reserva.paciente.nombre }} {{ reserva.paciente.apellido }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
       </ng-container>
     </select>
 
@@ -58,16 +58,20 @@
     <label for="Paciente">Paciente:</label>
     <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente">
       <option value="">Selecciona un Paciente</option>
-      <ng-container *ngFor="let persona of pacientes">
-        <option [ngValue]="persona">{{ persona.nombre }} {{ persona.apellido }}</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="persona.flag_es_doctor">
+          <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
       </ng-container>
     </select>
 
     <label for="Doctor">Doctor:</label>
     <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor">
       <option value="">Selecciona un Doctor</option>
-      <ng-container *ngFor="let persona of doctores">
-        <option [ngValue]="persona">{{ persona.nombre }} {{ persona.apellido }}</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="!persona.flag_es_doctor">
+          <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
       </ng-container>
     </select>
 
@@ -84,6 +88,9 @@
         <option [ngValue]="categoria">{{ categoria.descripcion }}</option>
       </ng-container>
     </select>
+
+    <label for="date">Fecha:</label>
+      <input type="date" id="reservanueva_date" [(ngModel)]="nuevaFichaClinica.fecha" name="date">
 
     <button type="submit" id="addClinicalRecordButton">Agregar Ficha Clínica</button>
   </form>
@@ -108,10 +115,9 @@
   </thead>
   <tbody>
     <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
-      <td>{{ fichaClinica.reserva.doctor.nombre }} {{fichaClinica.reserva.doctor.apellido}}</td>
-      <td>{{ fichaClinica.reserva.paciente.nombre }} {{fichaClinica.reserva.paciente.apellido}}</td>
-      <td>{{ fichaClinica.reserva.fecha | date: "dd/MM/yyyy"}}</td>
-      <td>{{ fichaClinica.reserva.hora }}</td>
+      <td>{{ fichaClinica.doctor.nombre }} {{fichaClinica.doctor.apellido}}</td>
+      <td>{{ fichaClinica.paciente.nombre }} {{fichaClinica.paciente.apellido}}</td>
+      <td>{{ fichaClinica.fecha | date: "dd/MM/yyyy"}}</td>
       <td>{{ fichaClinica.motivoConsulta }}</td>
       <td>{{ fichaClinica.diagnostico }}</td>
       <td>{{ fichaClinica.categoria.descripcion }}</td>
