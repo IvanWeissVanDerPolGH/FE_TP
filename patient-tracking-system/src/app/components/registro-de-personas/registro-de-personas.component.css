@@ -1,0 +1,95 @@
+/* Estilos generales para la página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para filtros y formulario de reserva */
+.filters, .reservation-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.filter-item, .form-item {
+  margin-bottom: 15px;
+}
+
+/* Estilos para botones */
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+/* Estilos para tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 0px solid #ddd;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Estilos para selects */
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para etiquetas y campos de entrada */
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para botones específicos */
+button.btn-info {
+  background-color: #17a2b8;
+}
+
+button.btn-success {
+  background-color: #28a745;
+}
+
+button.btn-danger {
+  background-color: #dc3545;
+}

@@ -25,6 +25,7 @@ body {
   flex-wrap: wrap;
 }
 
+
 .filter-item, .form-item {
   margin-bottom: 15px;
 }
@@ -33,6 +34,7 @@ body {
 button {
   padding: 5px 10px;
   margin-right: 5px;
+  margin-top: 5px;
   border-radius: 3px;
   cursor: pointer;
   background-color: #007bff;

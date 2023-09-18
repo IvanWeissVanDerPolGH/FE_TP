@@ -8,7 +8,7 @@ import { ReservaService } from '../reserva-de-turnos/Reserva.service';
 import { ConsultaService } from '../consulta/consulta.service';
 import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
 import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -109,6 +109,39 @@ export class FichaClinicaComponent implements OnInit {
     })
   }
 
+
+  //generar el XLSX
+  exportExcel(): void {
+    const data: any[] = [];
+  
+    // Agrega el encabezado a los datos
+    const header = ['Doctor', 'Paciente', 'Fecha', 'Hora', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
+    data.push(header);
+  
+    // Agrega los datos de las fichas clínicas
+    this.fichasClinicasFiltradas.forEach((fichaClinica) => {
+      const rowData = [
+        fichaClinica.reserva.doctor.nombre + ' ' + fichaClinica.reserva.doctor.apellido,
+        fichaClinica.reserva.paciente.nombre + ' ' + fichaClinica.reserva.paciente.apellido,
+        this.fichaClinicaService.formattedDate(fichaClinica.reserva.fecha),
+        fichaClinica.reserva.hora,
+        fichaClinica.motivoConsulta,
+        fichaClinica.diagnostico,
+        fichaClinica.categoria.descripcion
+      ];
+      data.push(rowData);
+    });
+  
+    // Crea un workbook y una hoja de cálculo
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'FichasClinicas');
+  
+    // Genera el archivo Excel y lo descarga
+    XLSX.writeFile(wb, 'fichas_clinicas.xlsx');
+  }
+
+  
   agregarFichaClinicaConReserva(): void {
     let fichaClinica: FichaClinica = {
       id: 0,
