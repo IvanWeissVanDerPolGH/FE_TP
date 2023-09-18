@@ -20,7 +20,7 @@ export class HomeComponent {
       icon: 'fal fa-file',
       title: 'Registro De Personas',
       description: 'Accede al registro de personas donde se puede crear un nuevo persona o modificar uno ya existente, Tambien se le asigna si es doctor o paciente.',
-      routelink: 'registroDePersonas',
+      routelink: 'registro-de-personas',
     },
     {
       icon: 'fal fa-pen-nib',

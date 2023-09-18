@@ -12,7 +12,7 @@ export const navbarData = [
   },
 
   {
-    routelink: 'registroDePersonas',
+    routelink: 'registro-de-personas',
     icon: 'fal fa-file',
     label: 'Registro De Personas'
   },

@@ -1,6 +1,7 @@
-<!-- registro-de-personas/registro-de-personas.component.html -->
+<!--
+<!-- registro-de-personas/registro-de-personas.component.html --1>
 <div>
-  <!-- Filter section -->
+  <!-- Filter section --1>
   <div>
     <h2>Filter Options</h2>
     <label for="nombreFilter">Nombre:</label>
@@ -17,11 +18,11 @@
     </select>
   </div>
 
-  <!-- Add Persona form -->
+  <!-- Add Persona form --1>
   <div>
     <h2>Add Persona</h2>
     <form (submit)="addPersona()">
-      <!-- Input fields for persona details -->
+      <!-- Input fields for persona details --1>
       <label for="nombre">Nombre:</label>
       <input type="text" id="nombre" name="nombre" [(ngModel)]="newPersona.nombre" required>
 
@@ -44,7 +45,7 @@
      </form>
   </div>
 
-<!-- Table to display personas -->
+<!-- Table to display personas --1>
 <table>
   <thead>
     <tr>
@@ -97,4 +98,121 @@
     </tr>
   </tbody>
 </table>
+</div>
+-->
+
+
+
+<div class="container">
+    <!-- Add Persona form -->
+    <h2>Registro de Persona</h2>
+    <div class="reservation-form">
+      <form (submit)="addPersona()">
+        <!-- Input fields for persona details -->
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" [(ngModel)]="newPersona.nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido:</label>
+          <input type="text" id="apellido" name="apellido" [(ngModel)]="newPersona.apellido" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono:</label>
+          <input type="text" id="telefono" name="telefono" [(ngModel)]="newPersona.telefono" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input  type="email" id="email" name="email" [(ngModel)]="newPersona.email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cedula">Cédula:</label>
+          <input type="text" id="cedula" name="cedula" [(ngModel)]="newPersona.cedula" required>
+        </div>
+
+        <div class="form-group">
+          <label for="flag_es_doctor">Es Doctor?</label>
+          <input  type="checkbox" id="flag_es_doctor" name="flag_es_doctor"
+                  style = "margin-left: 5px;"
+                  [(ngModel)]="newPersona.flag_es_doctor">
+        </div>
+
+        <button type="submit">Agregar Persona</button>
+       </form>
+    </div>
+
+  <!-- Filter section -->
+  <div class="filters">
+    <h2>Filter Options</h2>
+    <label for="nombreFilter">Nombre:</label>
+    <input type="text" id="nombreFilter" [(ngModel)]="nombreFilter" (input)="applyFilters()">
+
+    <label for="apellidoFilter">Apellido:</label>
+    <input type="text" id="apellidoFilter" [(ngModel)]="apellidoFilter" (input)="applyFilters()">
+
+    <label for="tipoFilter">Tipo:</label>
+    <select id="tipoFilter" [(ngModel)]="filtroTipo" (change)="applyFilters()">
+      <option value="todos">Todos</option>
+      <option value="pacientes">Pacientes</option>
+      <option value="doctores">Doctores</option>
+    </select>
+  </div>
+
+  <!-- Table to display personas -->
+  <table class="registro-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Teléfono</th>
+        <th>Email</th>
+        <th>Cédula</th>
+        <th>Estatus</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let persona of filteredPersonas; let i = index">
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.idPersona }}</span>
+          <input *ngIf="persona.isEditing" type="number" [(ngModel)]="persona.idPersona">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.nombre }}</span>
+          <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.nombre">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.apellido }}</span>
+          <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.apellido">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.telefono }}</span>
+          <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.telefono">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.email }}</span>
+          <input *ngIf="persona.isEditing" type="email" [(ngModel)]="persona.email">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing">{{ persona.cedula }}</span>
+          <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.cedula">
+        </td>
+        <td>
+          <span *ngIf="!persona.isEditing && persona.flag_es_doctor">Doctor</span>
+          <span *ngIf="!persona.isEditing && !persona.flag_es_doctor">Paciente</span>
+          <input *ngIf="persona.isEditing" type="checkbox" [(ngModel)]="persona.flag_es_doctor">
+        </td>
+        <td>
+          <button *ngIf="!persona.isEditing" (click)="editPersona(persona)">Edit</button>
+          <button *ngIf="persona.isEditing" (click)="updatePersona(persona, i)">Update</button>
+          <button (click)="deletePersona(persona.idPersona)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

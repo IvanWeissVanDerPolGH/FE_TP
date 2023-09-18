@@ -1,8 +1,9 @@
 
 <div class="container">
 <!-- Formulario de Reserva -->
+  <h2>Reserva de Turno</h2>
   <div class="reservation-form">
-    <h2>Reservar Turno</h2>
+
     <form (submit)="reservarTurno()">
       <label for="doctor">Doctor:</label>
         <!-- <input type="text" id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor"> -->
@@ -50,12 +51,12 @@
         <!-- Otras opciones de horarios -->
       </select>
 
-      <button type="submit" id="addReservationButton">Reservar</button>
+      <button type="submit" id="addReservationButton">Agregar Reserva</button>
     </form>
   </div>
   <!-- Filtros -->
   <div class="filters">
-    <h2>Filtros</h2>
+    <h2 style="color: gray;">Filtros</h2>
     <label for="doctorFilter">Doctor:</label>
     <input type="text" id="doctorFilter" [(ngModel)]="filtros.doctor" (input)="applyFilters()">
 
@@ -71,7 +72,7 @@
   </div>
 <!-- Tabla de turnos -->
 <div class="reservation-form">
-  <h2>Tabla de turnos</h2>
+  <h2>Reservas</h2>
   <table>
     <thead>
       <tr>
@@ -89,7 +90,7 @@
         <td>{{ reserva.fecha }}</td>
         <td>{{ reserva.hora }}</td>
         <td>
-          <button (click)="cancelReserva(reserva.id)">Cancelar</button>
+          <button class="btn-danger" (click)="cancelReserva(reserva.id)">Cancelar</button>
         </td>
       </tr>
     </tbody>
