@@ -77,9 +77,9 @@
             <input *ngIf="consulta.isEditing" type="text" [(ngModel)]="consulta.descripcion" class="form-control">
           </td>
           <td>
-            <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)" class="btn btn-info">Edit</button>
-            <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)" class="btn btn-success">Update</button>
-            <button (click)="deleteConsulta(consulta.id)" class="btn btn-danger">Delete</button>
+            <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)" class="btn btn-info">Editar</button>
+            <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)" class="btn btn-success">Modificar</button>
+            <button (click)="deleteConsulta(consulta.id)" class="btn btn-danger">Eliminar</button>
           </td>
         </tr>
       </tbody>

@@ -73,7 +73,7 @@ export class FichaClinicaComponent implements OnInit {
   initFichas(): void {
     this.filtros.fechaDesde = this.fichaClinicaService.formattedDate(new Date());
     this.filtros.fechaHasta = this.fichaClinicaService.formattedDate(new Date());
-    
+
     // Llama al servicio para cargar las reservas con los filtros
     this.loadFichasClinicas();
   }
@@ -125,11 +125,11 @@ export class FichaClinicaComponent implements OnInit {
   //generar el XLSX
   exportExcel(): void {
     const data: any[] = [];
-  
+
     // Agrega el encabezado a los datos
     const header = ['Doctor', 'Paciente', 'Fecha', 'Hora', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
     data.push(header);
-  
+
     // Agrega los datos de las fichas clínicas
     this.fichasClinicasFiltradas.forEach((fichaClinica) => {
       const rowData = [
@@ -143,17 +143,17 @@ export class FichaClinicaComponent implements OnInit {
       ];
       data.push(rowData);
     });
-  
+
     // Crea un workbook y una hoja de cálculo
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'FichasClinicas');
-  
+
     // Genera el archivo Excel y lo descarga
-    XLSX.writeFile(wb, 'fichas_clinicas.xlsx');
+    XLSX.writeFileXLSX(wb, 'fichas_clinicas.xlsx');
   }
 
-  
+
   agregarFichaClinicaConReserva(): void {
     const fichaClinica: FichaClinica = {
       id: 0,
@@ -181,7 +181,7 @@ export class FichaClinicaComponent implements OnInit {
       reserva: this.nuevaFichaClinica.reserva,
       categoria: this.nuevaFichaClinica.categoria
     };
-  
+
     this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
       // Reload the reservations with filters applied
       this.applyFilters();
