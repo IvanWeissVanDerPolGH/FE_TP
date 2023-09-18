@@ -49,7 +49,7 @@ export class RegistroDePersonasComponent implements OnInit {
 
 
   loadPersonas(): void {
-    this.personaService.getPersonas_sample().subscribe((personas) => {
+    this.personaService.getPersonas().subscribe((personas) => {
       this.listaDePersonas = personas;
     });
     this.applyFilters();

@@ -24,8 +24,8 @@
 
 <!-- Agregar Ficha Clínica -->
 <div class="clinical-record-form">
-  <h2>Agregar Ficha Clínica</h2>
-  <form (submit)="agregarFichaClinica()">
+  <h2>Agregar Ficha Clínica con Reserva</h2>
+  <form (submit)="agregarFichaClinicaConReserva()">
     <label for="reserva">Reserva:</label>
     <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva">
       <option value="">Selecciona una reserva</option>
@@ -52,6 +52,46 @@
   </form>
 </div>
 
+<div class="clinical-record-form-2">
+  <h2>Agregar Ficha Clínica sin Reserva</h2>
+  <form (submit)="agregarFichaClinica()">
+    <label for="Paciente">Paciente:</label>
+    <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente">
+      <option value="">Selecciona un Paciente</option>
+      <ng-container *ngFor="let persona of pacientes">
+        <option [ngValue]="persona">{{ persona.nombre }} {{ persona.apellido }}</option>
+      </ng-container>
+    </select>
+
+    <label for="Doctor">Doctor:</label>
+    <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor">
+      <option value="">Selecciona un Doctor</option>
+      <ng-container *ngFor="let persona of doctores">
+        <option [ngValue]="persona">{{ persona.nombre }} {{ persona.apellido }}</option>
+      </ng-container>
+    </select>
+
+    <label for="motivoConsulta">Motivo de Consulta:</label>
+    <input type="text" id="motivoConsulta" [(ngModel)]="nuevaFichaClinica.motivoConsulta" name="motivoConsulta">
+
+    <label for="diagnostico">Diagnóstico:</label>
+    <input type="text" id="diagnostico" [(ngModel)]="nuevaFichaClinica.diagnostico" name="diagnostico">
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [ngValue]="categoria">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+
+    <button type="submit" id="addClinicalRecordButton">Agregar Ficha Clínica</button>
+  </form>
+</div>
+
+<!-- boton para descargar el excel de las fichas filtradas  -->
+<button (click)="exportExcel()">Descargar Excel de las fichas filtradas</button>
+
 <!-- Lista de Fichas Clínicas -->
 <h2>Tabla de Fichas Clínicas</h2>
 <table>
@@ -68,8 +108,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
-      <td>{{ fichaClinica.reserva.doctor }}</td>
-      <td>{{ fichaClinica.reserva.paciente }}</td>
+      <td>{{ fichaClinica.reserva.doctor.nombre }} {{fichaClinica.reserva.doctor.apellido}}</td>
+      <td>{{ fichaClinica.reserva.paciente.nombre }} {{fichaClinica.reserva.paciente.apellido}}</td>
       <td>{{ fichaClinica.reserva.fecha | date: "dd/MM/yyyy"}}</td>
       <td>{{ fichaClinica.reserva.hora }}</td>
       <td>{{ fichaClinica.motivoConsulta }}</td>

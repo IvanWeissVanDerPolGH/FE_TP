@@ -12,23 +12,22 @@
           <option unselectable value="">Selecciona un doctor</option>
           <ng-container *ngFor="let persona of personas">
             <ng-container *ngIf="persona.flag_es_doctor">
-              <option [value]="persona.nombre + ' ' + persona.apellido">{{ persona.nombre + ' ' + persona.apellido }}</option>
+              <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
             </ng-container>
           </ng-container>
         </select>
 
       <label for="paciente">Pacientes:</label>
       <!-- <input type="text" id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="pacient"> -->
-      <!-- Marco -->
+      <!-- Lista desplegable de Pacientes -->
       <select id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="paciente">
-        <option unselectable value="">Selecciona un paciente</option>
+        <option value="">Selecciona un paciente</option>
         <ng-container *ngFor="let persona of personas">
           <ng-container *ngIf="!persona.flag_es_doctor">
-            <option [value]="persona.nombre + ' ' + persona.apellido">{{ persona.nombre + ' ' + persona.apellido }}</option>
+            <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
           </ng-container>
         </ng-container>
       </select>
-
       <label for="date">Fecha:</label>
       <input type="date" id="reservanueva_date" [(ngModel)]="nuevaReserva.fecha" name="date">
 

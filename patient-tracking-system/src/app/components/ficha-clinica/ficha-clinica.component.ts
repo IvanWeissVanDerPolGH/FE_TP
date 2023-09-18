@@ -6,6 +6,9 @@ import { Categoria } from '../consulta/consulta.interface';
 import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
 import { ReservaService } from '../reserva-de-turnos/Reserva.service';
 import { ConsultaService } from '../consulta/consulta.service';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -16,6 +19,9 @@ export class FichaClinicaComponent implements OnInit {
   fichasClinicasFiltradas: FichaClinica[] = [];
   reservasDeTurno: ReservaDeTurno[] = [];
   categorias: Categoria[] = [];
+  personas: Persona[] = [];
+  doctores: Persona[] = [];
+  pacientes: Persona[] = [];
   filtros: FichaClinicaFiltro = {
     doctor: '',
     paciente: '',
@@ -23,15 +29,26 @@ export class FichaClinicaComponent implements OnInit {
     fechaHasta: '',
     categoria: 0,
   };
-
+  personaVacia: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  };
   nuevaFichaClinica: FichaClinica = {
     id: 0,
+    paciente: this.personaVacia,
+    doctor: this.personaVacia,
     motivoConsulta: '',
     diagnostico: '',
     reserva: {
       id: 0,
-      doctor: '',
-      paciente: '',
+      doctor: this.personaVacia,
+      paciente: this.personaVacia,
       fecha: new Date(0),
       hora: '',
       categoria: { isEditing: false, id: 0, descripcion: '' },
@@ -42,12 +59,14 @@ export class FichaClinicaComponent implements OnInit {
   constructor(
     private fichaClinicaService: FichaClinicaService,
     private categoriaService: ConsultaService,
-    private reservas: ReservaService) {}
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService) {}
 
   ngOnInit(): void {
     this.initFichas();
     this.initReservas();
     this.loadCategorias();
+    this.loadPersonas();
   }
 
   // Carga las reservas del día actual
@@ -78,25 +97,91 @@ export class FichaClinicaComponent implements OnInit {
 
   //agarra todas las reservas del componente reserva de turno component
   loadReservas(): void {
-    this.reservas.getAllReservas().subscribe((reservas) => {
+    this.reservaService.getAllReservas().subscribe((reservas) => {
       // Aquí puedes acceder a la lista de categorias
       this.reservasDeTurno = reservas;
     });
+  }
+
+  loadPersonas(): void {
+    this.personaService.getPersonas().subscribe((persona) => {
+      this.personas = persona
+    })
+
+    this.doctores = this.personas.filter((persona) => {
+      persona.flag_es_doctor == true
+    })
+
+    this.pacientes = this.personas.filter((persona) => {
+      persona.flag_es_doctor == false
+    })
   }
 
   applyFilters(): void {
     this.loadFichasClinicas();
   }
 
-  agregarFichaClinica(): void {
+
+  //generar el XLSX
+  exportExcel(): void {
+    const data: any[] = [];
+  
+    // Agrega el encabezado a los datos
+    const header = ['Doctor', 'Paciente', 'Fecha', 'Hora', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
+    data.push(header);
+  
+    // Agrega los datos de las fichas clínicas
+    this.fichasClinicasFiltradas.forEach((fichaClinica) => {
+      const rowData = [
+        fichaClinica.reserva.doctor.nombre + ' ' + fichaClinica.reserva.doctor.apellido,
+        fichaClinica.reserva.paciente.nombre + ' ' + fichaClinica.reserva.paciente.apellido,
+        this.fichaClinicaService.formattedDate(fichaClinica.reserva.fecha),
+        fichaClinica.reserva.hora,
+        fichaClinica.motivoConsulta,
+        fichaClinica.diagnostico,
+        fichaClinica.categoria.descripcion
+      ];
+      data.push(rowData);
+    });
+  
+    // Crea un workbook y una hoja de cálculo
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'FichasClinicas');
+  
+    // Genera el archivo Excel y lo descarga
+    XLSX.writeFile(wb, 'fichas_clinicas.xlsx');
+  }
+
+  
+  agregarFichaClinicaConReserva(): void {
     const fichaClinica: FichaClinica = {
       id: 0,
+      paciente: this.nuevaFichaClinica.reserva.paciente,
+      doctor: this.nuevaFichaClinica.reserva.doctor,
       motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
       diagnostico: this.nuevaFichaClinica.diagnostico,
       reserva: this.nuevaFichaClinica.reserva,
       categoria: this.nuevaFichaClinica.categoria
     };
 
+    this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
+      // Reload the reservations with filters applied
+      this.applyFilters();
+    });
+  }
+
+  agregarFichaClinica(): void {
+    const fichaClinica: FichaClinica = {
+      id: 0,
+      paciente: this.nuevaFichaClinica.reserva.paciente,
+      doctor: this.nuevaFichaClinica.reserva.doctor,
+      motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
+      diagnostico: this.nuevaFichaClinica.diagnostico,
+      reserva: this.nuevaFichaClinica.reserva,
+      categoria: this.nuevaFichaClinica.categoria
+    };
+  
     this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
       // Reload the reservations with filters applied
       this.applyFilters();
