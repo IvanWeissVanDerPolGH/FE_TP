@@ -55,9 +55,9 @@
 <div class="clinical-record-form-2">
   <h2>Agregar Ficha Clínica sin Reserva</h2>
   <form (submit)="agregarFichaClinica()">
-    <label for="Paciente">Paciente:</label>
-    <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente">
-      <option value="">Selecciona un Paciente</option>
+    <label for="Doctor">Doctor:</label>
+    <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor">
+      <option value="">Selecciona un Doctor</option>
       <ng-container *ngFor="let persona of personas">
         <ng-container *ngIf="persona.flag_es_doctor">
           <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
@@ -65,9 +65,9 @@
       </ng-container>
     </select>
 
-    <label for="Doctor">Doctor:</label>
-    <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor">
-      <option value="">Selecciona un Doctor</option>
+    <label for="Paciente">Paciente:</label>
+    <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente">
+      <option value="">Selecciona un Paciente</option>
       <ng-container *ngFor="let persona of personas">
         <ng-container *ngIf="!persona.flag_es_doctor">
           <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
@@ -99,7 +99,11 @@
 <!-- boton para descargar el excel de las fichas filtradas  -->
 <button (click)="exportExcel()">Descargar Excel de las fichas filtradas</button>
 
+<!-- boton para descargar el PDF de las fichas filtradas  -->
+<button (click)="openPDF()">Descargar PDF de las fichas filtradas</button>
+
 <!-- Lista de Fichas Clínicas -->
+<div id="Exportar">
 <h2>Tabla de Fichas Clínicas</h2>
 <table>
   <thead>
@@ -107,7 +111,6 @@
       <th>Doctor</th>      
       <th>Paciente</th>
       <th>Fecha</th>
-      <th>Hora</th>
       <th>Motivo de Consulta</th>
       <th>Diagnóstico</th>
       <th>Categoría</th>
@@ -124,3 +127,4 @@
     </tr>
   </tbody>
 </table>
+</div>

@@ -9,6 +9,8 @@ import { ConsultaService } from '../consulta/consulta.service';
 import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
 import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-ficha-clinica',
@@ -115,16 +117,15 @@ export class FichaClinicaComponent implements OnInit {
     const data: any[] = [];
 
     // Agrega el encabezado a los datos
-    const header = ['Doctor', 'Paciente', 'Fecha', 'Hora', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
+    const header = ['Doctor', 'Paciente', 'Fecha', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
     data.push(header);
 
     // Agrega los datos de las fichas clínicas
     this.fichasClinicasFiltradas.forEach((fichaClinica) => {
       const rowData = [
-        fichaClinica.reserva.doctor.nombre + ' ' + fichaClinica.reserva.doctor.apellido,
-        fichaClinica.reserva.paciente.nombre + ' ' + fichaClinica.reserva.paciente.apellido,
-        this.fichaClinicaService.formattedDate(fichaClinica.reserva.fecha),
-        fichaClinica.reserva.hora,
+        fichaClinica.doctor.nombre,
+        fichaClinica.paciente.nombre,
+        this.fichaClinicaService.formattedDate(fichaClinica.fecha),
         fichaClinica.motivoConsulta,
         fichaClinica.diagnostico,
         fichaClinica.categoria.descripcion
@@ -141,6 +142,20 @@ export class FichaClinicaComponent implements OnInit {
     XLSX.writeFileXLSX(wb, 'fichas_clinicas.xlsx');
   }
 
+
+  //generar pdf
+  public openPDF(): void {
+    let DATA: any = document.getElementById('Exportar');
+    html2canvas(DATA).then((canvas: { height: number; width: number; toDataURL: (arg0: string) => any; }) => {
+      let fileWidth = 208;
+      let fileHeight = (canvas.height * fileWidth) / canvas.width;
+      const FILEURI = canvas.toDataURL('image/png');
+      let PDF = new jsPDF('p', 'mm', 'a4');
+      let position = 0;
+      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+      PDF.save('angular-demo.pdf');
+    });
+  }
 
   agregarFichaClinicaConReserva(): void {
     let fichaClinica: FichaClinica = {
