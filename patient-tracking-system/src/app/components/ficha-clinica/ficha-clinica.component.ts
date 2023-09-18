@@ -114,37 +114,24 @@ export class FichaClinicaComponent implements OnInit {
 
   //generar el XLSX
   exportExcel(): void {
-    const data: any[] = [];
-
-    // Agrega el encabezado a los datos
-    const header = ['Doctor', 'Paciente', 'Fecha', 'Motivo de Consulta', 'Diagnóstico', 'Categoría'];
-    data.push(header);
-
-    // Agrega los datos de las fichas clínicas
-    this.fichasClinicasFiltradas.forEach((fichaClinica) => {
-      const rowData = [
-        fichaClinica.doctor.nombre,
-        fichaClinica.paciente.nombre,
-        this.fichaClinicaService.formattedDate(fichaClinica.fecha),
-        fichaClinica.motivoConsulta,
-        fichaClinica.diagnostico,
-        fichaClinica.categoria.descripcion
-      ];
-      data.push(rowData);
-    });
-
-    // Crea un workbook y una hoja de cálculo
-    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+    const data = this.fichasClinicasFiltradas.map(fichaClinica => ({
+      Doctor: fichaClinica.doctor.nombre + ' ' + fichaClinica.doctor.apellido,
+      Paciente: fichaClinica.paciente.nombre + ' ' + fichaClinica.paciente.apellido,
+      Fecha: this.fichaClinicaService.formattedDate(fichaClinica.fecha),
+      'Motivo de Consulta': fichaClinica.motivoConsulta,
+      Diagnóstico: fichaClinica.diagnostico,
+      Categoría: fichaClinica.categoria.descripcion,
+    }));
+  
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'FichasClinicas');
-
-    // Genera el archivo Excel y lo descarga
-    XLSX.writeFileXLSX(wb, 'fichas_clinicas.xlsx');
+  
+    XLSX.writeFile(wb, 'fichas_clinicas.xlsx');
   }
 
-
   //generar pdf
-  public openPDF(): void {
+  public exportPDF(): void {
     let DATA: any = document.getElementById('Exportar');
     html2canvas(DATA).then((canvas: { height: number; width: number; toDataURL: (arg0: string) => any; }) => {
       let fileWidth = 208;
