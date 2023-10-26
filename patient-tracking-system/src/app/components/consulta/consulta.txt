@@ -1,0 +1,339 @@
+consulta.component.css
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.consulta-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.consulta-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.consulta-table th,
+.consulta-table td {
+  padding: 10px;
+  text-align: center;
+}
+
+.consulta-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  color: #fff;
+  border: none;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+
+consulta.component.html
+<!--
+<div>
+  <h2>Categorias de Consultas</h2>
+
+  <form (ngSubmit)="addConsulta()" #consultaForm="ngForm">
+    <div class="form-group">
+      <label for="idCategoria">ID de Categoría:</label>
+      <input type="number" id="idCategoria" name="idCategoria" [(ngModel)]="newConsulta.id" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" [(ngModel)]="newConsulta.descripcion" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Categoria</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID Category</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let consulta of listaDeConsultas; let i = index">
+        <td>
+          <span *ngIf="!consulta.isEditing">{{ consulta.id }}</span>
+          <input *ngIf="consulta.isEditing" type="number" [(ngModel)]="consulta.id">
+        </td>
+        <td>
+          <span *ngIf="!consulta.isEditing">{{ consulta.descripcion }}</span>
+          <input *ngIf="consulta.isEditing" type="text" [(ngModel)]="consulta.descripcion">
+        </td>
+        <td>
+          <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)">Edit</button>
+          <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)">Update</button>
+          <button (click)="deleteConsulta(consulta.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+-->
+
+<div class="container">
+  <h2>Categoria de Consultas</h2>
+
+  <form (ngSubmit)="addConsulta()" #consultaForm="ngForm" class="consulta-form">
+    <div class="form-group">
+      <label for="idCategoria">Id Categoría:</label>
+      <input type="number" id="idCategoria" name="idCategoria" [(ngModel)]="newConsulta.id" required >
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" [(ngModel)]="newConsulta.descripcion" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Agregar Categoria</button>
+  </form>
+
+  <div class="consulta-form">
+    <table class="consulta-table">
+      <thead>
+        <tr>
+          <th>Id Categoria</th>
+          <th>Descripcion</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let consulta of listaDeConsultas; let i = index">
+          <td>
+            <span *ngIf="!consulta.isEditing">{{ consulta.id }}</span>
+            <input *ngIf="consulta.isEditing" type="number" [(ngModel)]="consulta.id" class="form-control">
+          </td>
+          <td>
+            <span *ngIf="!consulta.isEditing">{{ consulta.descripcion }}</span>
+            <input *ngIf="consulta.isEditing" type="text" [(ngModel)]="consulta.descripcion" class="form-control">
+          </td>
+          <td>
+            <button *ngIf="!consulta.isEditing" (click)="editConsulta(consulta)" class="btn btn-info">Editar</button>
+            <button *ngIf="consulta.isEditing" (click)="updateConsulta(consulta, i)" class="btn btn-success">Modificar</button>
+            <button (click)="deleteConsulta(consulta.id)" class="btn btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+consulta.component.ts
+import { Component, OnInit } from '@angular/core';
+import { ConsultaService } from 'src/app/components/consulta/consulta.service';
+import { Categoria } from './consulta.interface';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-consulta',
+  templateUrl: './consulta.component.html',
+  styleUrls: ['./consulta.component.css']
+})
+
+
+export class ConsultaComponent implements OnInit{
+  newConsulta: Categoria = { id: -1, descripcion: '' ,isEditing: false}; // Initialize a new consultation
+  listaDeConsultas: Categoria[] = [];
+
+  constructor(private ConsultaService: ConsultaService) {}
+
+  ngOnInit(): void {
+    this.loadConsultas();
+    this.sortConsultasById()
+  }
+
+
+  // Sort the listaDeConsultas array by id
+  sortConsultasById(): void {
+    this.listaDeConsultas.sort((a, b) => a.id - b.id);
+  }
+  // Read operation: Load the list of consultations
+  loadConsultas(): void {
+    this.ConsultaService.getConsultas_sample().subscribe((consultas) => {
+      this.listaDeConsultas = consultas;
+      this.sortConsultasById();
+    });
+  }
+
+  // Create operation: Add a new consultation
+  addConsulta(): void {
+    this.ConsultaService.addConsulta(this.newConsulta).subscribe((updatedConsultas) => {
+      // Optionally, you can handle the response here and update the list
+      this.listaDeConsultas = updatedConsultas;
+      this.newConsulta = { id: -1, descripcion: '' ,isEditing: false}; // Clear the form
+      this.sortConsultasById();
+    });
+  }
+
+  // Edit operation: Enable editing for a consultation
+  editConsulta(consulta: Categoria): void {
+    consulta.isEditing = true;
+    this.sortConsultasById();
+  }
+
+  // Update operation: Apply changes to a consultation
+  updateConsulta(consulta: Categoria, index: number): void {
+    // Send the updated consultation to the service for processing
+    this.ConsultaService.updateConsulta(consulta).subscribe(() => {
+      // Optionally, you can handle the response here and update the list
+      this.listaDeConsultas[index].isEditing = false; // Disable editing mode
+      this.sortConsultasById();
+    });
+  }
+
+  // Delete operation: Remove a consultation by id
+  deleteConsulta(id: number): Observable<Categoria[]> {
+    // Find the index of the consultation with the matching id
+    const index = this.listaDeConsultas.findIndex(consulta => consulta.id === id);
+
+    if (index !== -1) {
+      // If the consultation is found, remove it from the array
+      this.listaDeConsultas.splice(index, 1);
+    }
+
+    // Return the updated list of consultations as an observable
+    return new Observable<Categoria[]>(observer => {
+      observer.next(this.listaDeConsultas);
+      observer.complete();
+    });
+  }
+}
+
+
+consulta.interface.ts
+export interface Categoria {
+  isEditing: boolean;
+  id: number;
+  descripcion: string;
+}
+
+
+consulta.service.ts
+import { Data_consulta } from '../../../assets/data/consulta/data_consulta';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Categoria } from 'src/app/components/consulta/consulta.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ConsultaService {
+
+  private listaDataConsulta: Categoria[]
+  // constructor(private http: HttpClient) {}
+  constructor() {
+    this.listaDataConsulta = Data_consulta
+  }
+
+  getConsultas_sample(): Observable<Categoria[]> {
+    // Return the data from the Data_consulta constant as an observable
+    return new Observable<Categoria[]>(observer => {
+      observer.next(this.listaDataConsulta);
+      observer.complete();
+    });
+  }
+
+  //metodo para obtener la lista de categorias, usada para otros componentes
+  getCategorias(): Observable<Categoria[]>{
+      return this.getConsultas_sample();
+  }
+
+    // Create operation: Add a new consultation
+    addConsulta(consulta: Categoria): Observable<Categoria[]> {
+
+      this.listaDataConsulta.push(consulta);
+      // You can optionally return the added consultation
+      return new Observable<Categoria[]>(observer => {
+        observer.next(this.listaDataConsulta);
+        observer.complete();
+      });
+    }
+
+
+    // Update operation: Update a consultation by idCategoria
+  updateConsulta(consultaToUpdate: Categoria): Observable<Categoria[]> {
+    // Find the index of the consultation with the matching idCategoria
+    const index = this.listaDataConsulta.findIndex(consulta => consulta.id === consultaToUpdate.id);
+
+    if (index !== -1) {
+      // If the consultation is found, update its properties
+      this.listaDataConsulta[index].descripcion = consultaToUpdate.descripcion;
+    }
+
+    // Return the updated list of consultations as an observable
+    return new Observable<Categoria[]>(observer => {
+      observer.next(this.listaDataConsulta);
+      observer.complete();
+    });
+  }
+}
+
+

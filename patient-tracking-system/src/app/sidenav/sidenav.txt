@@ -1,0 +1,251 @@
+nav-data.ts
+export const navbarData = [
+  {
+    routelink: '',
+    icon: 'fal fa-home',
+    label: 'Inicio'
+  },
+
+  {
+    routelink: 'consultas',
+    icon: 'fal fa-tags',
+    label: 'Categoria de Consultas'
+  },
+
+  {
+    routelink: 'registro-de-personas',
+    icon: 'fal fa-file',
+    label: 'Registro De Personas'
+  },
+
+  {
+    routelink: 'reserva-de-turnos',
+    icon: 'fal fa-pen-nib',
+    label: 'Reserva de Turnos'
+  },
+  {
+    routelink: 'ficha-clinica',
+    icon: 'fal fa-list',
+    label: 'Ficha Clinica'
+  }
+
+
+
+
+];
+
+
+sidenav.component.css
+/*@import "~bootstrap/dist/css/bootstrap.css";
+*/
+.sidenav {
+  background: #263238 ;
+  transition: all .5s ease;
+  position: fixed;
+  z-index: 1;
+  top:0;
+  width: 5.5rem;
+  height: 100vh;
+  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+
+}
+
+.logo-container{
+  display: flex;
+  align-items: center;
+  padding: 0.938rem 0.938rem 0 0.938rem;
+  width: 100%;
+
+  .logo{
+    background: #fff;
+    text-align: center;
+    width: 4rem;
+    min-width: 4rem;
+    border-radius: 0.313rem;
+    padding: 0.313rem;
+    font-size: 24px;
+    font-weight: 900;
+    cursor: pointer;
+    border: none;
+    height: auto;
+
+  }
+
+  .logo-text{
+    margin-left: 1.5rem;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .btn-close{
+    margin-left: auto;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+
+    .fa-times{
+      color:#fff;
+      font-size: 24px;
+    }
+  }
+}
+
+.sidenav-collapsed{
+  width: 17rem;
+}
+
+.sidenav-nav{
+  list-style: none;
+  padding: 0.938rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: calc(100%-3.65rem);
+  cursor: pointer;
+
+  .sidenav-nav-item{
+    width: 100%;
+    margin-bottom: 0.625rem;
+
+    .sidenav-nav-link{
+      display: flex;
+      align-items: center;
+      height: 3rem;
+      color: #f3f3f3;
+      text-decoration: none;
+      border-radius: 0.625rem;
+      transition: all .3s ease;
+
+      .sidenav-link-icon{
+        font-size: 22px;
+        width: 3rem;
+        min-width: 3rem;
+        margin: 0 0.5rem;
+        text-align: center;
+      }
+
+      .sidenav-link-text{
+        margin-left: 1.5rem;
+      }
+    }
+  }
+
+  .sidenav-nav-item:hover{
+    .sidenav-nav-link{
+      background-color: #fff;
+      color: #000;
+    }
+  }
+}
+
+.active{
+  background-color: #fff;
+
+  .sidenav-link-icon,
+  .sidenav-link-text{
+    color:#000;
+  }
+}
+
+
+sidenav.component.html
+<div class= "sidenav" [ngClass]="collapsed ? 'sidenav-collapsed':''" >
+  <div class= "logo-container">
+    <button class= "logo" (click)="toggleCollapse()">{{logo}}</button>
+    <div class= "logo-text" @fadeInOut *ngIf="collapsed">{{logoName}}</div>
+    <button class= "btn-close" @rotate *ngIf="collapsed" (click)="closeSidenav()">
+      <i class="fal fa-times close-icon"></i>
+    </button>
+  </div>
+  <ul class= "sidenav-nav">
+    <li class="sidenav-nav-item" *ngFor="let data of navData">
+      <a class= "sidenav-nav-link"
+        [routerLink]="[data.routelink]"
+        routerLinkActive="active"
+        [routerLinkActiveOptions] = "{exact: true}"
+      >
+        <i class= "sidenav-link-icon"  [class]="data.icon"></i>
+        <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">{{data.label}}</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+
+sidenav.component.ts
+import { Component, Output, EventEmitter, OnInit, HostListener } from '@angular/core';
+import { navbarData } from './nav-data';
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
+interface SideNavToggle{
+  screenWidth: number;
+  collapsed: boolean;
+}
+
+@Component({
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrls: ['./sidenav.component.css'],
+  animations: [
+    trigger('fadeInOut',[
+      transition(':enter',[
+        style({opacity:0}),
+        animate('350ms'),
+          style({opacity: 1})
+      ]),
+      transition(':leave',[
+        style({opacity:1}),
+        animate('350ms'),
+          style({opacity: 0})
+      ])
+    ]),
+    trigger('rotate',[
+      transition(':enter', [
+        animate('500ms',
+          keyframes([
+            style({transform: 'rotate(0deg)', offset: '0'}),
+            style({transform: 'rotate(2turn)', offset: '1'}),
+
+          ])
+        )
+      ])
+    ])
+  ]
+})
+export class SidenavComponent implements OnInit{
+  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter;
+  collapsed = false;
+  screenWidth = 0;
+  navData = navbarData;
+  logo = 'PTS';
+  logoName = 'Patient Tracking';
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any){
+    this.screenWidth = window.innerWidth;
+    if(this.screenWidth <=768){
+      this.collapsed = false;
+      this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+    }
+  }
+
+  ngOnInit(): void{
+    this.screenWidth = window.innerWidth;
+  }
+
+  toggleCollapse():void{
+    this.collapsed = !this.collapsed
+    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+  }
+
+  closeSidenav():void{
+    this.collapsed = false;
+    this.onToggleSideNav.emit({collapsed: this.collapsed, screenWidth: this.screenWidth});
+  }
+}
+
+

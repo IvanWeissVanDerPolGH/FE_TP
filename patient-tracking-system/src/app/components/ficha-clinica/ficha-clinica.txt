@@ -1,0 +1,683 @@
+ficha-clinica-filtro.interface.ts
+import { Categoria } from "../consulta/consulta.interface";
+
+export interface FichaClinicaFiltro {
+    doctor: string; // Nombre del doctor
+    paciente: string; // Nombre del paciente
+    fechaDesde: string; // Fecha de la reserva
+    fechaHasta: string; // Horario de la reserva (por ejemplo, "09:00 - 10:00")
+    categoria: number;
+  }
+  
+
+ficha-clinica.component.css
+/* Estilos generales para la página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  min-width: 850px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para filtros y formulario de reserva */
+.filters, .clinical-record-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.filter-item, .form-item {
+  margin-bottom: 15px;
+}
+
+/* Estilos para botones */
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+/* Estilos para tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 0px solid #ddd;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Estilos para selects */
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para etiquetas y campos de entrada */
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para botones específicos */
+button.btn-info {
+  background-color: #17a2b8;
+}
+
+button.btn-success {
+  background-color: #28a745;
+}
+
+button.btn-danger {
+  background-color: #dc3545;
+}
+
+
+ficha-clinica.component.html
+<!---->
+<!-- Filtros --1>
+<div class="filters">
+  <h2>Filter Options</h2>
+  <label for="doctorFilter">Doctor:</label>
+  <input type="text" id="doctorFilter" [(ngModel)]="filtros.doctor" (input)="applyFilters()">
+
+  <label for="pacienteFilter">Paciente:</label>
+  <input type="text" id="pacienteFilter" [(ngModel)]="filtros.paciente" (input)="applyFilters()">
+
+  <label for="fechaDesdeFilter">Fecha desde:</label>
+  <input type="date" id="fechaDesdeFilter" [(ngModel)]="filtros.fechaDesde" (input)="applyFilters()">
+
+  <label for="fechaHastaFilter">Fecha hasta:</label>
+  <input type="date" id="fechaHastaFilter" [(ngModel)]="filtros.fechaHasta" (input)="applyFilters()">
+
+  <label for="categoriaFilter">Categoria:</label>
+  <select id="categoriaFilter" [(ngModel)]="filtros.categoria" (change)="applyFilters()">
+    <option value="">Selecciona una categoría</option>
+    <ng-container *ngFor="let categoria of categorias">
+      <option [value]="categoria.id">{{ categoria.descripcion }}</option>
+    </ng-container>
+  </select>
+</div>
+
+<!-- Agregar Ficha Clínica con reserva--1>
+<div class="clinical-record-form">
+  <h2>Agregar Ficha Clínica con Reserva</h2>
+  <form (submit)="agregarFichaClinicaConReserva()">
+    <label for="reserva">Reserva:</label>
+    <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva">
+      <option value="">Selecciona una reserva</option>
+      <ng-container *ngFor="let reserva of reservasDeTurno">
+        <option [ngValue]="reserva">{{ reserva.doctor.nombre }} {{ reserva.doctor.apellido }} - {{ reserva.paciente.nombre }} {{ reserva.paciente.apellido }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}</option>
+      </ng-container>
+    </select>
+
+    <label for="motivoConsulta">Motivo de Consulta:</label>
+    <input type="text" id="motivoConsulta" [(ngModel)]="nuevaFichaClinica.motivoConsulta" name="motivoConsulta">
+
+    <label for="diagnostico">Diagnóstico:</label>
+    <input type="text" id="diagnostico" [(ngModel)]="nuevaFichaClinica.diagnostico" name="diagnostico">
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [ngValue]="categoria">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+
+    <button type="submit" id="addClinicalRecordButton">Agregar Ficha Clínica</button>
+  </form>
+</div>
+
+<!-- Agregar Ficha Clínica sin reserva--1>
+<div class="clinical-record-form-2">
+  <h2>Agregar Ficha Clínica sin Reserva</h2>
+  <form (submit)="agregarFichaClinica()">
+    <label for="Doctor">Doctor:</label>
+    <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor">
+      <option value="">Selecciona un Doctor</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="persona.flag_es_doctor">
+          <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
+      </ng-container>
+    </select>
+
+    <label for="Paciente">Paciente:</label>
+    <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente">
+      <option value="">Selecciona un Paciente</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="!persona.flag_es_doctor">
+          <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
+      </ng-container>
+    </select>
+
+    <label for="motivoConsulta">Motivo de Consulta:</label>
+    <input type="text" id="motivoConsulta" [(ngModel)]="nuevaFichaClinica.motivoConsulta" name="motivoConsulta">
+
+    <label for="diagnostico">Diagnóstico:</label>
+    <input type="text" id="diagnostico" [(ngModel)]="nuevaFichaClinica.diagnostico" name="diagnostico">
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [ngValue]="categoria">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+
+    <label for="date">Fecha:</label>
+      <input type="date" id="reservanueva_date" [(ngModel)]="nuevaFichaClinica.fecha" name="date">
+
+    <button type="submit" id="addClinicalRecordButton">Agregar Ficha Clínica</button>
+  </form>
+</div>
+
+<!-- boton para descargar el excel de las fichas filtradas  --1>
+<button (click)="exportExcel()">Descargar Excel de las fichas filtradas</button>
+
+<!-- boton para descargar el PDF de las fichas filtradas  --1>
+<button (click)="exportPDF()">Descargar PDF de las fichas filtradas</button>
+
+<!-- Lista de Fichas Clínicas --1>
+<div id="Exportar">
+<h2>Tabla de Fichas Clínicas</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Doctor</th>
+      <th>Paciente</th>
+      <th>Fecha</th>
+      <th>Motivo de Consulta</th>
+      <th>Diagnóstico</th>
+      <th>Categoría</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
+      <td>{{ fichaClinica.doctor.nombre }} {{fichaClinica.doctor.apellido}}</td>
+      <td>{{ fichaClinica.paciente.nombre }} {{fichaClinica.paciente.apellido}}</td>
+      <td>{{ fichaClinica.fecha | date: "dd/MM/yyyy"}}</td>
+      <td>{{ fichaClinica.motivoConsulta }}</td>
+      <td>{{ fichaClinica.diagnostico }}</td>
+      <td>{{ fichaClinica.categoria.descripcion }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+-->
+
+<div class="container">
+  <h2 class="section-title">Ficha Clínica de Pacientes</h2>
+<!-- Agregar Ficha Clínica con reserva-->
+<div class="clinical-record-form">
+  <h2 class="section-title">Con reserva</h2>
+  <form (submit)="agregarFichaClinicaConReserva()">
+    <label for="reserva" class="label">Reserva:</label>
+    <select id="reserva" [(ngModel)]="nuevaFichaClinica.reserva" name="reserva" class="select">
+      <option value="">Selecciona una reserva</option>
+      <ng-container *ngFor="let reserva of reservasDeTurno">
+        <option [ngValue]="reserva" class="option">
+          {{ reserva.doctor.nombre }} {{ reserva.doctor.apellido }} - {{ reserva.paciente.nombre }} {{ reserva.paciente.apellido }} - {{ reserva.fecha | date: "dd/MM/yyyy" }} - {{ reserva.hora }}
+        </option>
+      </ng-container>
+    </select>
+
+    <label for="motivoConsulta" class="label">Motivo de Consulta:</label>
+    <input type="text" id="motivoConsulta" [(ngModel)]="nuevaFichaClinica.motivoConsulta" name="motivoConsulta" class="input-text">
+
+    <label for="diagnostico" class="label">Diagnóstico:</label>
+    <input type="text" id="diagnostico" [(ngModel)]="nuevaFichaClinica.diagnostico" name="diagnostico" class="input-text">
+
+    <label for="categoria" class="label">Categoría:</label>
+    <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria" class="select">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [ngValue]="categoria" class="option">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+
+    <button type="submit" id="addClinicalRecordButton" class="button">Agregar Ficha Clínica</button>
+  </form>
+</div>
+
+<!-- Agregar Ficha Clínica sin reserva-->
+<div class="clinical-record-form">
+  <h2 class="section-title">Sin reserva</h2>
+  <form (submit)="agregarFichaClinica()">
+    <label for="doctor" class="label">Doctor:</label>
+    <select id="doctor" [(ngModel)]="nuevaFichaClinica.doctor" name="doctor" class="select">
+      <option value="">Selecciona un Doctor</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="persona.flag_es_doctor">
+          <option [ngValue]="persona" class="option">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
+      </ng-container>
+    </select>
+
+    <label for="paciente" class="label">Paciente:</label>
+    <select id="paciente" [(ngModel)]="nuevaFichaClinica.paciente" name="paciente" class="select">
+      <option value="">Selecciona un Paciente</option>
+      <ng-container *ngFor="let persona of personas">
+        <ng-container *ngIf="!persona.flag_es_doctor">
+          <option [ngValue]="persona" class="option">{{ persona.nombre + ' ' + persona.apellido }}</option>
+        </ng-container>
+      </ng-container>
+    </select>
+
+    <label for="motivoConsulta" class="label">Motivo de Consulta:</label>
+    <input type="text" id="motivoConsulta" [(ngModel)]="nuevaFichaClinica.motivoConsulta" name="motivoConsulta" class="input-text">
+
+    <label for="diagnostico" class="label">Diagnóstico:</label>
+    <input type="text" id="diagnostico" [(ngModel)]="nuevaFichaClinica.diagnostico" name="diagnostico" class="input-text">
+
+    <label for="categoria" class="label">Categoría:</label>
+    <select id="categoria" [(ngModel)]="nuevaFichaClinica.categoria" name="categoria" class="select">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [ngValue]="categoria" class="option">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+
+    <label for="reservanueva_date" class="label">Fecha:</label>
+    <input type="date" id="reservanueva_date" [(ngModel)]="nuevaFichaClinica.fecha" name="date" class="input-date">
+
+    <button type="submit" id="addClinicalRecordButton" class="button">Agregar Ficha Clínica</button>
+  </form>
+</div>
+
+<!-- Filtros -->
+<div class="filters">
+  <h2 style="color: grey;">Filtros</h2>
+  <div class="form-group">
+    <label for="doctorFilter" class="label">Doctor:</label>
+    <input type="text" id="doctorFilter" [(ngModel)]="filtros.doctor" (input)="applyFilters()" class="input-text">
+  </div>
+
+  <div class="form-group">
+    <label for="pacienteFilter" class="label">Paciente:</label>
+    <input type="text" id="pacienteFilter" [(ngModel)]="filtros.paciente" (input)="applyFilters()" class="input-text">
+  </div>
+
+  <div class="form-group">
+    <label for="fechaDesdeFilter" class="label">Fecha desde:</label>
+    <input type="date" id="fechaDesdeFilter" [(ngModel)]="filtros.fechaDesde" (input)="applyFilters()" class="input-date">
+  </div>
+
+  <div class="form-group">
+    <label for="fechaHastaFilter" class="label">Fecha hasta:</label>
+    <input type="date" id="fechaHastaFilter" [(ngModel)]="filtros.fechaHasta" (input)="applyFilters()" class="input-date">
+  </div>
+
+  <div class="form-group">
+    <label for="categoriaFilter" class="label">Categoria:</label>
+    <select id="categoriaFilter" [(ngModel)]="filtros.categoria" (change)="applyFilters()" class="select">
+      <option value="">Selecciona una categoría</option>
+      <ng-container *ngFor="let categoria of categorias">
+        <option [value]="categoria.id" class="option">{{ categoria.descripcion }}</option>
+      </ng-container>
+    </select>
+  </div>
+</div>
+
+<!-- botones para descargar el excel y el PDF -->
+<button (click)="exportExcel()" class="download-button">Descargar Excel de las fichas filtradas</button>
+<button (click)="exportPDF()" class="download-button">Descargar PDF de las fichas filtradas</button>
+
+<div class="clinical-record-form">
+<!-- Lista de Fichas Clínicas -->
+<div id="Exportar" class="clinical-records-table">
+  <h2 class="section-title">Fichas Clínicas</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Paciente</th>
+        <th>Fecha</th>
+        <th>Motivo de Consulta</th>
+        <th>Diagnóstico</th>
+        <th>Categoría</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let fichaClinica of fichasClinicasFiltradas; let i = index">
+        <td>{{ fichaClinica.doctor.nombre }} {{fichaClinica.doctor.apellido}}</td>
+        <td>{{ fichaClinica.paciente.nombre }} {{fichaClinica.paciente.apellido}}</td>
+        <td>{{ fichaClinica.fecha | date: "dd/MM/yyyy"}}</td>
+        <td>{{ fichaClinica.motivoConsulta }}</td>
+        <td>{{ fichaClinica.diagnostico }}</td>
+        <td>{{ fichaClinica.categoria.descripcion }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
+
+ficha-clinica.component.ts
+import { Component, OnInit } from '@angular/core';
+import { FichaClinicaService } from './ficha-clinica.service';
+import { FichaClinica } from './ficha-clinica.interface';
+import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
+import { Categoria } from '../consulta/consulta.interface';
+import { ReservaDeTurno } from '../reserva-de-turnos/reserva-de-turnos.interface';
+import { ReservaService } from '../reserva-de-turnos/Reserva.service';
+import { ConsultaService } from '../consulta/consulta.service';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { sort } from 'ramda';
+
+@Component({
+  selector: 'app-ficha-clinica',
+  templateUrl: './ficha-clinica.component.html',
+  styleUrls: ['./ficha-clinica.component.css']
+})
+export class FichaClinicaComponent implements OnInit {
+  fichasClinicasFiltradas: FichaClinica[] = [];
+  fechaFiltroReserva: Date = new Date(0);
+  reservasDeTurno: ReservaDeTurno[] = [];
+  categorias: Categoria[] = [];
+  personas: Persona[] = [];
+  filtros: FichaClinicaFiltro = {
+    doctor: '',
+    paciente: '',
+    fechaDesde: '',
+    fechaHasta: '',
+    categoria: 0,
+  };
+  personaVacia: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  };
+  nuevaFichaClinica: FichaClinica = {
+    id: 0,
+    paciente: this.personaVacia,
+    doctor: this.personaVacia,
+    motivoConsulta: '',
+    diagnostico: '',
+    fecha: new Date(0),
+    reserva: {
+      id: 0,
+      doctor: this.personaVacia,
+      paciente: this.personaVacia,
+      fecha: new Date(0),
+      hora: '',
+      categoria: { isEditing: false, id: 0, descripcion: '' },
+    },
+    categoria: { isEditing: false, id: 0, descripcion: '' },
+  };
+  
+  constructor(
+    private fichaClinicaService: FichaClinicaService,
+    private categoriaService: ConsultaService,
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService) {}
+
+  ngOnInit(): void {
+    this.initFichas();
+    this.initReservas();
+    this.loadCategorias();
+    this.loadPersonas();
+  }
+
+  // Carga las reservas del día actual
+  initFichas(): void {
+    this.filtros.fechaDesde = this.fichaClinicaService.formattedDate(new Date());
+    this.filtros.fechaHasta = this.fichaClinicaService.formattedDate(new Date());
+
+    // Llama al servicio para cargar las reservas con los filtros
+    this.applyFilters();
+  }
+
+  initReservas(): void {
+    this.loadReservas();
+  }
+
+  applyFilters(): void {
+    this.fichaClinicaService.getFichasClinicas(this.filtros).subscribe((fichasClinicas) => {
+      this.fichasClinicasFiltradas = fichasClinicas;
+    });
+  }
+
+  loadCategorias(): void {
+    this.categoriaService.getCategorias().subscribe((categorias) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.categorias = categorias;
+    });
+  }
+
+  //agarra todas las reservas del componente reserva de turno component
+  loadReservas(): void {
+    this.reservaService.getAllReservas().subscribe((reservas) => {
+      //ordenar por fecha
+      reservas.sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+      // Aquí puedes acceder a la lista de categorias
+      this.reservasDeTurno = reservas;
+    });
+  }
+
+  loadPersonas(): void {
+    this.personaService.getPersonas().subscribe((persona) => {
+      this.personas = persona
+    })
+  }
+
+
+  //generar el XLSX
+  exportExcel(): void {
+    const data = this.fichasClinicasFiltradas.map(fichaClinica => ({
+      Doctor: fichaClinica.doctor.nombre + ' ' + fichaClinica.doctor.apellido,
+      Paciente: fichaClinica.paciente.nombre + ' ' + fichaClinica.paciente.apellido,
+      Fecha: this.fichaClinicaService.formattedDate(fichaClinica.fecha),
+      'Motivo de Consulta': fichaClinica.motivoConsulta,
+      Diagnóstico: fichaClinica.diagnostico,
+      Categoría: fichaClinica.categoria.descripcion,
+    }));
+  
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'FichasClinicas');
+  
+    XLSX.writeFile(wb, 'fichas_clinicas.xlsx');
+  }
+
+  //generar pdf
+  public exportPDF(): void {
+    let DATA: any = document.getElementById('Exportar');
+    html2canvas(DATA).then((canvas: { height: number; width: number; toDataURL: (arg0: string) => any; }) => {
+      let fileWidth = 208;
+      let fileHeight = (canvas.height * fileWidth) / canvas.width;
+      const FILEURI = canvas.toDataURL('image/png');
+      let PDF = new jsPDF('p', 'mm', 'a4');
+      let position = 0;
+      PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+      PDF.save('fichas_clinicas.pdf');
+    });
+  }
+
+  agregarFichaClinicaConReserva(): void {
+    let fichaClinica: FichaClinica = {
+      id: 0,
+      paciente: this.nuevaFichaClinica.reserva.paciente,
+      doctor: this.nuevaFichaClinica.reserva.doctor,
+      motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
+      diagnostico: this.nuevaFichaClinica.diagnostico,
+      fecha: this.nuevaFichaClinica.reserva.fecha,
+      reserva: this.nuevaFichaClinica.reserva,
+      categoria: this.nuevaFichaClinica.categoria
+    };
+
+    this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
+      // Reload the reservations with filters applied
+      this.applyFilters();
+    });
+
+    fichaClinica = this.nuevaFichaClinica;
+  }
+
+  agregarFichaClinica(): void {
+    let fichaClinica: FichaClinica = {
+      id: 0,
+      paciente: this.nuevaFichaClinica.paciente,
+      doctor: this.nuevaFichaClinica.doctor,
+      motivoConsulta: this.nuevaFichaClinica.motivoConsulta,
+      diagnostico: this.nuevaFichaClinica.diagnostico,
+      fecha: new Date(this.nuevaFichaClinica.fecha + 'T00:00:00'),
+      reserva: this.nuevaFichaClinica.reserva,
+      categoria: this.nuevaFichaClinica.categoria
+    };
+
+    this.fichaClinicaService.addFichaClinica(fichaClinica).subscribe(() => {
+      // Reload the reservations with filters applied
+      this.applyFilters();
+    });
+
+    fichaClinica = this.nuevaFichaClinica;
+  }
+}
+
+
+ficha-clinica.interface.ts
+import { Categoria } from "../consulta/consulta.interface";
+import { ReservaDeTurno } from "../reserva-de-turnos/reserva-de-turnos.interface";
+import { RegistroPersona_interface as Persona } from "../registro-de-personas/registro-de-personas.interface";
+
+export interface FichaClinica {
+    id: number;
+    paciente: Persona;
+    doctor: Persona;
+    motivoConsulta: string;
+    diagnostico: string;
+    fecha: Date,
+    reserva: ReservaDeTurno;
+    categoria: Categoria;
+}
+
+ficha-clinica.service.ts
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { FichaClinica } from './ficha-clinica.interface'; // Import the FichaClinica interface
+import { FichaClinicaFiltro } from './ficha-clinica-filtro.interface';
+import { Data_fichasClinicas } from 'src/assets/data/fichaClinica/data_fichaClinica';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class FichaClinicaService {
+  fichasClinicas: FichaClinica[]
+
+  constructor() {
+    this.fichasClinicas = Data_fichasClinicas;
+  }
+
+  formattedDate(date: Date){
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0
+    let yyyy = date.getFullYear();
+    return yyyy + '/' + mm + '/' + dd;
+  }
+
+  // Get a list of fichas clínicas based on filters
+  getFichasClinicas(filtros: FichaClinicaFiltro): Observable<FichaClinica[]> {
+    // Simulate filtering based on filters if needed
+    let filteredFichasClinicas = this.fichasClinicas;
+
+    if (filtros.doctor) {
+      filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
+        ficha.doctor.nombre.toLowerCase().concat(' ',ficha.doctor.apellido.toLowerCase()).includes(filtros.doctor.toLowerCase())
+      );
+    }
+    if (filtros.paciente) {
+      filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
+      ficha.paciente.nombre.toLowerCase().concat(' ',ficha.paciente.apellido.toLowerCase()).includes(filtros.paciente.toLowerCase())
+      );
+    }
+    if (filtros.fechaDesde) {
+      filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
+        ficha.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
+      );
+    }
+    if (filtros.fechaHasta) {
+      filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
+        ficha.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
+      );
+    }
+    if (filtros.categoria) {
+      filteredFichasClinicas = filteredFichasClinicas.filter((ficha) =>
+        ficha.categoria.id === +filtros.categoria
+      );
+    }
+
+    return of(filteredFichasClinicas);
+  }
+
+  // Add a new ficha clínica
+  addFichaClinica(fichaClinica: FichaClinica): Observable<FichaClinica[]> {
+    // Generate a unique ID for the new ficha clínica
+    fichaClinica.id = this.generateNewId();
+
+    // Push the new ficha clínica to the array
+    this.fichasClinicas.push(fichaClinica);
+
+    return of(this.fichasClinicas);
+  }
+
+  // Generate a unique ID for a new ficha clínica (you may need to implement this logic)
+  generateNewId(): number {
+    // Find the maximum ID in the current data
+    const maxId = Math.max(...this.fichasClinicas.map((f) => f.id));
+
+    // Generate a new ID by incrementing the maximum ID
+    return maxId + 1;
+  }
+}
+
+

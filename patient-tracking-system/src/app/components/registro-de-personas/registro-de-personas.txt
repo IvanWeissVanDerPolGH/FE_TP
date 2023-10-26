@@ -1,0 +1,517 @@
+registro-de-personas.component.css
+/* Estilos generales para la página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  min-width: 850px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para filtros y formulario de reserva */
+.filters, .reservation-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.filter-item, .form-item {
+  margin-bottom: 15px;
+}
+
+/* Estilos para botones */
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+/* Estilos para tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 0px solid #ddd;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Estilos para selects */
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para etiquetas y campos de entrada */
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para botones específicos */
+button.btn-info {
+  background-color: #17a2b8;
+}
+
+button.btn-success {
+  background-color: #28a745;
+}
+
+button.btn-danger {
+  background-color: #dc3545;
+}
+
+
+registro-de-personas.component.html
+<!--
+<!-- registro-de-personas/registro-de-personas.component.html --1>
+<div>
+  <!-- Filter section --1>
+  <div>
+    <h2>Filter Options</h2>
+    <label for="nombreFilter">Nombre:</label>
+    <input type="text" id="nombreFilter" [(ngModel)]="nombreFilter" (input)="applyFilters()">
+
+    <label for="apellidoFilter">Apellido:</label>
+    <input type="text" id="apellidoFilter" [(ngModel)]="apellidoFilter" (input)="applyFilters()">
+
+    <label for="tipoFilter">Tipo:</label>
+    <select id="tipoFilter" [(ngModel)]="filtroTipo" (change)="applyFilters()">
+      <option value="todos">Todos</option>
+      <option value="pacientes">Pacientes</option>
+      <option value="doctores">Doctores</option>
+    </select>
+  </div>
+
+  <!-- Add Persona form --1>
+  <div>
+    <h2>Add Persona</h2>
+    <form (submit)="addPersona()">
+      <!-- Input fields for persona details --1>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" [(ngModel)]="newPersona.nombre" required>
+
+      <label for="apellido">Apellido:</label>
+      <input type="text" id="apellido" name="apellido" [(ngModel)]="newPersona.apellido" required>
+
+      <label for="telefono">Teléfono:</label>
+      <input type="text" id="telefono" name="telefono" [(ngModel)]="newPersona.telefono" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" [(ngModel)]="newPersona.email" required>
+
+      <label for="cedula">Cédula:</label>
+      <input type="text" id="cedula" name="cedula" [(ngModel)]="newPersona.cedula" required>
+
+      <label for="flag_es_doctor">Es Doctor?</label>
+      <input type="checkbox" id="flag_es_doctor" name="flag_es_doctor" [(ngModel)]="newPersona.flag_es_doctor">
+
+      <button type="submit">Add</button>
+     </form>
+  </div>
+
+<!-- Table to display personas --1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Teléfono</th>
+      <th>Email</th>
+      <th>Cédula</th>
+      <th>Estatus</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let persona of filteredPersonas; let i = index">
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.idPersona }}</span>
+        <input *ngIf="persona.isEditing" type="number" [(ngModel)]="persona.idPersona">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.nombre }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.nombre">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.apellido }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.apellido">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.telefono }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.telefono">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.email }}</span>
+        <input *ngIf="persona.isEditing" type="email" [(ngModel)]="persona.email">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing">{{ persona.cedula }}</span>
+        <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.cedula">
+      </td>
+      <td>
+        <span *ngIf="!persona.isEditing && persona.flag_es_doctor">Doctor</span>
+        <span *ngIf="!persona.isEditing && !persona.flag_es_doctor">Paciente</span>
+        <input *ngIf="persona.isEditing" type="checkbox" [(ngModel)]="persona.flag_es_doctor">
+      </td>
+      <td>
+        <button *ngIf="!persona.isEditing" (click)="editPersona(persona)">Edit</button>
+        <button *ngIf="persona.isEditing" (click)="updatePersona(persona, i)">Update</button>
+        <button (click)="deletePersona(persona.idPersona)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+-->
+
+
+
+<div class="container">
+    <!-- Add Persona form -->
+    <h2>Registro de Personas</h2>
+    <div class="reservation-form">
+      <form (submit)="addPersona()">
+        <!-- Input fields for persona details -->
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" [(ngModel)]="newPersona.nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido:</label>
+          <input type="text" id="apellido" name="apellido" [(ngModel)]="newPersona.apellido" required>
+        </div>
+
+        <div class="form-group">
+          <label for="telefono">Teléfono:</label>
+          <input type="text" id="telefono" name="telefono" [(ngModel)]="newPersona.telefono" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input  type="email" id="email" name="email" [(ngModel)]="newPersona.email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="cedula">Cédula:</label>
+          <input type="text" id="cedula" name="cedula" [(ngModel)]="newPersona.cedula" required>
+        </div>
+
+        <div class="form-group">
+          <label for="flag_es_doctor">Es Doctor?</label>
+          <input  type="checkbox" id="flag_es_doctor" name="flag_es_doctor"
+                  style = "margin-left: 5px;"
+                  [(ngModel)]="newPersona.flag_es_doctor">
+        </div>
+
+        <button type="submit">Agregar Persona</button>
+       </form>
+    </div>
+
+  <!-- Filter section -->
+  <div class="filters">
+    <h2 style="color: gray;">Filtros</h2>
+    <label for="nombreFilter">Nombre:</label>
+    <input type="text" id="nombreFilter" [(ngModel)]="nombreFilter" (input)="applyFilters()">
+
+    <label for="apellidoFilter">Apellido:</label>
+    <input type="text" id="apellidoFilter" [(ngModel)]="apellidoFilter" (input)="applyFilters()">
+
+    <label for="tipoFilter">Tipo:</label>
+    <select id="tipoFilter" [(ngModel)]="filtroTipo" (change)="applyFilters()">
+      <option value="todos">Todos</option>
+      <option value="pacientes">Pacientes</option>
+      <option value="doctores">Doctores</option>
+    </select>
+  </div>
+
+  <!-- Table to display personas -->
+  <div class="reservation-form">
+    <h2>Personas</h2>
+    <table class="registro-table">
+      <thead>
+        <tr>
+          <!--<th>ID</th>-->
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Cédula</th>
+          <th>Dr.?</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let persona of filteredPersonas; let i = index">
+          <!--<td>
+            <span *ngIf="!persona.isEditing">{{ persona.idPersona }}</span>
+            <input *ngIf="persona.isEditing" type="number" [(ngModel)]="persona.idPersona">
+          </td>-->
+          <td>
+            <span *ngIf="!persona.isEditing">{{ persona.nombre }}</span>
+            <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.nombre">
+          </td>
+          <td>
+            <span *ngIf="!persona.isEditing">{{ persona.apellido }}</span>
+            <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.apellido">
+          </td>
+          <td>
+            <span *ngIf="!persona.isEditing">{{ persona.telefono }}</span>
+            <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.telefono">
+          </td>
+          <td>
+            <span *ngIf="!persona.isEditing">{{ persona.email }}</span>
+            <input *ngIf="persona.isEditing" type="email" [(ngModel)]="persona.email">
+          </td>
+          <td>
+            <span *ngIf="!persona.isEditing">{{ persona.cedula }}</span>
+            <input *ngIf="persona.isEditing" type="text" [(ngModel)]="persona.cedula">
+          </td>
+          <td>
+            <input *ngIf="!persona.isEditing && persona.flag_es_doctor" type="checkbox" [(ngModel)]="persona.flag_es_doctor" disabled>
+            <input *ngIf="!persona.isEditing && !persona.flag_es_doctor" type="checkbox"[(ngModel)]="persona.flag_es_doctor" disabled>
+            <input *ngIf="persona.isEditing" type="checkbox" [(ngModel)]="persona.flag_es_doctor">
+          </td>
+          <td>
+            <button class="btn-info" *ngIf="!persona.isEditing" (click)="editPersona(persona)">Editar</button>
+            <button class="btn-success" *ngIf="persona.isEditing" (click)="updatePersona(persona, i)">Modificar</button>
+            <button class="btn-danger"(click)="deletePersona(persona.idPersona)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+registro-de-personas.component.ts
+import { RegistroPersonaService } from 'src/app/components/registro-de-personas/registro-de-personas.service';
+import { Component, OnInit } from '@angular/core';
+import { RegistroPersona_interface as Persona } from './registro-de-personas.interface';
+
+@Component({
+  selector: 'app-registro-de-personas',
+  templateUrl: './registro-de-personas.component.html',
+  styleUrls: ['./registro-de-personas.component.css']
+})
+export class RegistroDePersonasComponent implements OnInit {
+  nombreFilter: string = ''; // Declare the nombreFilter property
+  apellidoFilter = '';
+  filtroTipo = 'todos'; // Valor predeterminado para mostrar todos
+
+  newPersona: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  };
+  filteredPersonas: Persona[] = [];
+  listaDePersonas: Persona[] = [];
+
+  constructor(private personaService: RegistroPersonaService) {}
+
+  ngOnInit(): void {
+    this.loadPersonas();
+  }
+
+  applyFilters(): void {
+    // Aplicar filtros en base a nombre, apellido y tipo
+    this.filteredPersonas = this.listaDePersonas.filter((persona) => {
+      const nombreMatches = persona.nombre.toLowerCase().includes(this.nombreFilter.toLowerCase());
+      const apellidoMatches = persona.apellido.toLowerCase().includes(this.apellidoFilter.toLowerCase());
+
+      if (this.filtroTipo === 'pacientes') {
+        return !persona.flag_es_doctor && nombreMatches && apellidoMatches;
+      } else if (this.filtroTipo === 'doctores') {
+        return persona.flag_es_doctor && nombreMatches && apellidoMatches;
+      } else {
+        return nombreMatches && apellidoMatches;
+      }
+    });
+  }
+
+
+  loadPersonas(): void {
+    this.personaService.getPersonas().subscribe((personas) => {
+      this.listaDePersonas = personas;
+    });
+    this.applyFilters();
+  }
+
+  addPersona(): void {
+    this.personaService.addPersona(this.newPersona).subscribe(() => {
+      this.loadPersonas(); // Reload personas after adding
+      this.newPersona = {
+        idPersona: 0,
+        nombre: '',
+        apellido: '',
+        telefono: '',
+        email: '',
+        cedula: '',
+        flag_es_doctor: false,
+        isEditing: false
+      };
+    });
+  }
+
+  editPersona(persona: Persona): void {
+    persona.isEditing = true;
+  }
+
+  updatePersona(persona: Persona, index: number): void {
+    this.personaService.updatePersona(persona).subscribe(() => {
+      persona.isEditing = false;
+      this.loadPersonas(); // Reload personas after updating
+    });
+  }
+
+  deletePersona(idPersona: number): void {
+    this.personaService.deletePersona(idPersona).subscribe(() => {
+      this.loadPersonas(); // Reload personas after deleting
+    });
+  }
+}
+
+
+registro-de-personas.interface.ts
+export interface RegistroPersona_interface {
+  idPersona: number;
+  nombre: string;
+  apellido: string;
+  telefono: string;
+  email: string;
+  cedula: string;
+  flag_es_doctor: boolean;
+  isEditing: boolean;
+}
+
+
+registro-de-personas.service.ts
+import { RegistroPersona_interface as Persona } from 'src/app/components/registro-de-personas/registro-de-personas.interface';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Data_RegistroDePersonas } from '../../../assets/data/RegistroDePersonas/RegistroDePersonas';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RegistroPersonaService {
+  private personas: Persona[]
+
+
+  constructor() {
+    this.personas = Data_RegistroDePersonas;
+  }
+
+  // Read operation: Get the list of personas
+  getPersonas(): Observable<Persona[]> {
+    // You can return the list of personas directly or fetch from an API if needed
+    return new Observable<Persona[]>((observer) => {
+      observer.next(this.personas);
+      observer.complete();
+    });
+  }
+
+  // Create operation: Add a new persona
+  addPersona(persona: Persona): Observable<void> {
+
+    // Genera un ID nuevo y lo asigna a la persona
+    persona.idPersona = this.generateNewId();
+
+    // Push the new persona to the data source
+    this.personas.push(persona);
+
+    // You can save the updated data source to a file or an API if needed
+
+    return new Observable<void>((observer) => {
+      observer.next();
+      observer.complete();
+    });
+  }
+
+  // Update operation: Update an existing persona
+  updatePersona(persona: Persona): Observable<void> {
+    const index = this.personas.findIndex((p) => p.idPersona === persona.idPersona);
+
+    if (index !== -1) {
+      // Replace the existing persona with the updated one
+      this.personas[index] = persona;
+
+      // You can save the updated data source to a file or an API if needed
+    }
+
+    return new Observable<void>((observer) => {
+      observer.next();
+      observer.complete();
+    });
+  }
+
+  // Delete operation: Remove a persona by ID
+  deletePersona(idPersona: number): Observable<void> {
+    const index = this.personas.findIndex((p) => p.idPersona === idPersona);
+
+    if (index !== -1) {
+      // If the persona is found, remove it from the array
+      this.personas.splice(index, 1);
+
+      // You can save the updated data source to a file or an API if needed
+    }
+
+    return new Observable<void>((observer) => {
+      observer.next();
+      observer.complete();
+    });
+  }
+
+  // Generate a new unique ID (You may implement your own logic)
+  private generateNewId(): number {
+    // Find the maximum ID in the current data
+    const maxId = Math.max(...this.personas.map((p) => p.idPersona));
+
+    // Generate a new ID by incrementing the maximum ID
+    return maxId + 1;
+  }
+}
+
+

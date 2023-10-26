@@ -1,0 +1,165 @@
+home.component.css
+.titulo{
+  margin-left: 1.5rem;
+}
+
+/* Estilo para el contenedor de las cartas */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  padding : 15px;
+}
+
+/* Estilo para cada carta */
+.card {
+  width: 20rem; /* Ajusta el ancho según tus preferencias */
+  background-color: #ffffff; /* Fondo blanco para la tarjeta */
+  border: 1px solid #263238; /* Borde del mismo color que el sidebar */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  height: auto;
+  cursor: pointer;
+
+  .card-body{
+    padding: 3px;
+    align-items: center;
+  }
+  .card-head{
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+
+  }
+}
+
+/* Estilo para los iconos */
+.card i {
+  font-size: 2rem; /* Ajusta el tamaño del icono según tus preferencias */
+  margin-right: 10px; /* Espacio a la derecha del icono */
+  color: #263238; /* Color del icono */
+}
+
+/* Estilo para el título */
+.card h5 {
+  color: #263238; /* Color del título */
+}
+
+/* Estilo para la descripción */
+.card p {
+  color: #a3abc0ff; /* Color de la descripción */
+}
+
+.card-link{
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  color: #f3f3f3;
+  text-decoration: none;
+  border-radius: 0.625rem;
+  transition: all .3s ease;
+}
+
+/* Estilo para el contenedor */
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Estilo para la fila */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+/* Estilo para las columnas */
+.col {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  align-items: center;
+}
+
+/* Estilo para forzar un salto de línea (100% de ancho) */
+.w-100 {
+  width: 100%;
+}
+
+
+home.component.html
+<div class="card-gral">
+  <div class="card-gral-head">
+    <h1 class="titulo"> {{bienvenida}} </h1>
+  </div>
+  <div class="card-container">
+    <div class="card" *ngFor="let item of cardList,let i = index" [routerLink]="item.routelink">
+      <!-- Inicio de la lista de cartas -->
+      <div class="card-body">
+        <div class="card-head">
+          <i class="{{item.icon}} "></i>
+        </div>
+        <h5 class="card-title">{{item.title}}</h5>
+        <p class="card-text">{{item.description}}</p>
+        <!-- No es necesario el botón "Ver más" -->
+      </div>
+      <!-- Fin de la lista de cartas -->
+      <div class="w-100" *ngIf="(i + 1) % 3 === 0"></div>
+    </div>
+  </div>
+</div>
+
+
+
+home.component.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  templateUrl:'./home.component.html',
+  styleUrls: ['./home.component.css']
+})
+
+export class HomeComponent {
+  bienvenida = 'Bienvenido. Que desea realizar?';
+
+  cardList: any[] = [
+    {
+      icon: 'fal fa-tags',
+      title: 'Categoria de Consultas',
+      description: 'Se puede agregar, modificar o eliminar la categoria de las consultas.',
+      routelink: 'consultas',
+    },
+    {
+      icon: 'fal fa-file',
+      title: 'Registro De Personas',
+      description: 'Accede al registro de personas donde se puede crear un nuevo persona o modificar uno ya existente, Tambien se le asigna si es doctor o paciente.',
+      routelink: 'registro-de-personas',
+    },
+    {
+      icon: 'fal fa-pen-nib',
+      title: 'Reserva de Turnos',
+      description: 'Accede a la reserva de turnos para agregar o modificar un turno, tambien se puede indicar a que hora se tendra el turno.',
+      routelink: 'reserva-de-turnos',
+    },
+    {
+      icon: 'fal fa-list',
+      title: 'Ficha Clinica',
+      description: 'Accede a la ficha clinica para agregar o modificar la ficha, tambien se puede hacer un reporte en excel o pdf.',
+      routelink: 'ficha-clinica',
+    }
+    // Agrega más objetos de carta según sea necesario
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+}
+
+

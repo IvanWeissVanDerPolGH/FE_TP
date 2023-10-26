@@ -1,0 +1,484 @@
+reserva-de-turnos-filtro.interface.ts
+export interface ReservaDeTurnoFiltro {
+  doctor: string; // Nombre del doctor
+  paciente: string; // Nombre del paciente
+  fechaDesde: string; // Fecha de la reserva
+  fechaHasta: string; // Horario de la reserva (por ejemplo, "09:00 - 10:00")
+}
+
+
+reserva-de-turnos.component.css
+/* Estilos generales para la página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para filtros y formulario de reserva */
+.filters, .reservation-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+
+.filter-item, .form-item {
+  margin-bottom: 15px;
+}
+
+/* Estilos para botones */
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-top: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+}
+
+/* Estilos para tablas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 0px solid #ddd;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Estilos para selects */
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para etiquetas y campos de entrada */
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+/* Estilos para botones específicos */
+button.btn-info {
+  background-color: #17a2b8;
+}
+
+button.btn-success {
+  background-color: #28a745;
+}
+
+button.btn-danger {
+  background-color: #dc3545;
+}
+
+
+reserva-de-turnos.component.html
+
+<div class="container">
+<!-- Formulario de Reserva -->
+  <h2>Reserva de Turno</h2>
+  <div class="reservation-form">
+
+    <form (submit)="reservarTurno()">
+      <label for="doctor">Doctor:</label>
+        <!-- <input type="text" id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor"> -->
+        <!-- Marco -->
+        <select id="reservanueva_docName" [(ngModel)]="nuevaReserva.doctor" name="doctor">
+          <option value="" disabled selected>Selecciona un doctor</option>
+          <!--<option unselectable value="">Selecciona un doctor</option>-->
+          <ng-container *ngFor="let persona of personas">
+            <ng-container *ngIf="persona.flag_es_doctor">
+              <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+            </ng-container>
+          </ng-container>
+        </select>
+
+      <label for="paciente">Pacientes:</label>
+      <!-- <input type="text" id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="pacient"> -->
+      <!-- Lista desplegable de Pacientes -->
+
+      <select id="reservanueva_pacientName" [(ngModel)]="nuevaReserva.paciente" name="paciente">
+        <option value="" disabled selected>Selecciona un paciente</option>
+        <!--<option value="">Selecciona un paciente</option> -->
+        <ng-container *ngFor="let persona of personas">
+          <ng-container *ngIf="!persona.flag_es_doctor">
+            <option [ngValue]="persona">{{ persona.nombre + ' ' + persona.apellido }}</option>
+          </ng-container>
+        </ng-container>
+      </select>
+      <label for="date">Fecha:</label>
+      <input type="date" id="reservanueva_date" [(ngModel)]="nuevaReserva.fecha" name="date">
+
+      <label for="hora">Hora:</label>
+      <select id="reservanueva_timeName" [(ngModel)]="nuevaReserva.hora" name="time">
+        <option value="" disabled selected>Selecciona una hora</option>
+        <!--<option unselectable value="">Selecciona una hora</option>-->
+        <!-- Opciones para seleccionar la hora -->
+        <option value="09:00 - 10:00">09:00 - 10:00</option>
+        <option value="10:00 - 11:00">10:00 - 11:00</option>
+        <option value="11:00 - 12:00">11:00 - 12:00</option>
+        <option value="12:00 - 13:00">12:00 - 13:00</option>
+        <option value="13:00 - 14:00">13:00 - 14:00</option>
+        <option value="14:00 - 15:00">14:00 - 15:00</option>
+        <option value="15:00 - 16:00">15:00 - 16:00</option>
+        <option value="16:00 - 17:00">16:00 - 17:00</option>
+        <option value="17:00 - 18:00">17:00 - 18:00</option>
+        <option value="18:00 - 19:00">18:00 - 19:00</option>
+        <option value="19:00 - 20:00">19:00 - 20:00</option>
+        <option value="20:00 - 21:00">20:00 - 21:00</option>
+        <!-- Otras opciones de horarios -->
+      </select>
+
+      <button type="submit" id="addReservationButton">Agregar Reserva</button>
+    </form>
+  </div>
+  <!-- Filtros -->
+  <div class="filters">
+    <h2 style="color: gray;">Filtros</h2>
+    <label for="doctorFilter">Doctor:</label>
+    <input type="text" id="doctorFilter" [(ngModel)]="filtros.doctor" (input)="applyFilters()">
+
+    <label for="pacienteFilter">Paciente:</label>
+    <input type="text" id="pacienteFilter" [(ngModel)]="filtros.paciente" (input)="applyFilters()">
+    <label for="dateDesdeFilter">Fecha desde:</label>
+    <input type="date" id="dateDesdeFilter" [(ngModel)]="filtros.fechaDesde" (input)="applyFilters()">
+
+    <label for="dateHastaFilter">Fecha hasta:</label>
+    <input type="date" id="dateHastaFilter" [(ngModel)]="filtros.fechaHasta" (input)="applyFilters()">
+
+    <!-- <button (click)="applyFilters()">Apply Filters</button> Add this button -->
+  </div>
+<!-- Tabla de turnos -->
+<div class="reservation-form">
+  <h2>Reservas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Doctor</th>
+        <th>Paciente</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let reserva of reservasFormateadas; let i = index">
+        <td>{{ reserva.doctor }}</td>
+        <td>{{ reserva.paciente }}</td>
+        <td>{{ reserva.fecha }}</td>
+        <td>{{ reserva.hora }}</td>
+        <td>
+          <button class="btn-danger" (click)="cancelReserva(reserva.id)">Cancelar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+
+reserva-de-turnos.component.ts
+import { Component, OnInit } from '@angular/core';
+import { ReservaService, ReservaDeTurnoFormateada } from './Reserva.service';
+import { ReservaDeTurno } from './reserva-de-turnos.interface';
+import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
+import { RegistroPersonaService } from '../registro-de-personas/registro-de-personas.service';//para traer las personas desde registro-de-personas
+import { ConsultaService } from '../consulta/consulta.service';// para traer las categorias desde el registro de consultas
+import { Categoria } from '../consulta/consulta.interface';
+import { RegistroPersona_interface as Persona } from '../registro-de-personas/registro-de-personas.interface';
+
+@Component({
+  selector: 'app-reserva-de-turnos',
+  templateUrl: './reserva-de-turnos.component.html',
+  styleUrls: ['./reserva-de-turnos.component.css']
+})
+export class ReservaDeTurnosComponent implements OnInit {
+  reservasFormateadas: ReservaDeTurnoFormateada[] = []; // Arreglo para almacenar las reservas
+  personas: Persona[] = [];                                 // Declaración de la propiedad personas
+  categorias: Categoria[] = [];                        //Arreglo para almacenar las categorias
+  filtros: ReservaDeTurnoFiltro = {
+    doctor: '',
+    paciente: '',
+    fechaDesde: '',
+    fechaHasta: ''
+  };
+  categoriaVacia: Categoria = {
+    isEditing: false,
+    id: 0,
+    descripcion: '',
+  }
+  personaVacia: Persona = {
+    idPersona: 0,
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    cedula: '',
+    flag_es_doctor: false,
+    isEditing: false
+  }
+  nuevaReserva: ReservaDeTurno = {
+    id: 0,
+    doctor: this.personaVacia,
+    paciente: this.personaVacia,
+    fecha: new Date(0),
+    hora: '',
+    categoria: this.categoriaVacia
+  };
+  isEditing: boolean[] = []; // Array to track if each reservation is in editing mode
+
+  //para usar la lista de personas y categorias
+  constructor(
+    private reservaService: ReservaService,
+    private personaService: RegistroPersonaService,
+    private consultaService: ConsultaService
+    ) {}
+
+  ngOnInit(): void {
+    this.initReservas(); // Carga las reservas del día actual por defecto
+    this.loadPersonas(); // Carga la lista de personas
+    this.loadCategorias();//Carga la lista de categorias
+  }
+
+  //Cargar las personas(Doctores y pacientes)
+  loadPersonas(): void {
+    this.personaService.getPersonas().subscribe((personas) => {
+      // Aquí puedes acceder a la lista de personas (doctores y pacientes)
+      this.personas = personas;
+    });
+  }
+
+    //Cargar las categorias
+  loadCategorias(): void {
+    this.consultaService.getCategorias().subscribe((categorias) => {
+      // Aquí puedes acceder a la lista de categorias
+      this.categorias = categorias;
+    });
+  }
+  
+
+  // Carga las reservas del día actual
+  initReservas(): void {
+    this.filtros.fechaDesde = this.reservaService.formattedDate(new Date());
+    this.filtros.fechaHasta = this.reservaService.formattedDate(new Date());
+    
+    // Llama al servicio para cargar las reservas con los filtros
+    this.applyFilters();
+  }
+
+  // Aplicar filtros y cargar las reservas
+  applyFilters(): void {
+    // Llama al servicio para cargar las reservas con los filtros
+    this.reservaService.getReservas(this.filtros).subscribe((reservasFormateadas) => {
+      this.reservasFormateadas = reservasFormateadas;
+    
+    });
+  }
+
+  reservarTurno(): void {
+    // Check if the required fields are not empty
+    if (this.nuevaReserva.fecha && this.nuevaReserva.hora) {
+      // Buscar el Doctor seleccionado en la lista de personas
+      let doctorSeleccionado = this.personas.find(persona => persona === this.nuevaReserva.doctor);
+      // Buscar el Paciente seleccionado en la lista de personas
+      let pacienteSeleccionado = this.personas.find(persona => persona === this.nuevaReserva.paciente);
+
+        // Verificar si se encontraron el Doctor y el Paciente
+        if (doctorSeleccionado && pacienteSeleccionado) {
+          // Crear una nueva instancia de ReservaDeTurno
+          const nuevaReserva: ReservaDeTurno = {
+            id: 0,
+            doctor: doctorSeleccionado,
+            paciente: pacienteSeleccionado,
+            fecha: new Date(this.nuevaReserva.fecha + 'T00:00:00'),
+            hora: this.nuevaReserva.hora,
+            categoria: this.nuevaReserva.categoria
+          };
+
+          // Call the service to add the new reservation
+      this.reservaService.addReserva(nuevaReserva).subscribe(() => {
+        // Reload the reservations with filters applied
+        this.applyFilters();
+      });
+     
+      }
+     
+    }
+  }
+  
+
+  // Cancela una reserva
+  cancelReserva(idReserva: number): void {
+    // Llama al servicio para cancelar la reserva por su ID
+    this.reservaService.cancelReserva(idReserva).subscribe(() => {
+      // Actualiza la lista de reservas después de la cancelación
+      this.applyFilters();
+    });
+  }
+
+}
+
+
+reserva-de-turnos.interface.ts
+import { Categoria } from "../consulta/consulta.interface";
+import { RegistroPersona_interface as Persona } from "../registro-de-personas/registro-de-personas.interface";
+
+export interface ReservaDeTurno {
+  id: number; // ID único de la reserva
+  doctor: Persona; // Nombre del doctor
+  paciente: Persona; // Nombre del paciente
+  fecha: Date; // Fecha de la reserva
+  hora: string; // Horario de la reserva (por ejemplo, "09:00 - 10:00")
+  categoria:Categoria;//Descripcion de la categoria
+}
+
+
+Reserva.service.ts
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { ReservaDeTurno } from 'src/app/components/reserva-de-turnos/reserva-de-turnos.interface';
+import { ReservaDeTurnoFiltro } from './reserva-de-turnos-filtro.interface';
+import { data_DatosDeReservas } from 'src/assets/data/reserva/data_reserva';
+import { Categoria } from '../consulta/consulta.interface';
+
+export type ReservaDeTurnoFormateada = {
+  fecha: string;
+  id: number;
+  doctor: string;
+  paciente: string;
+  hora: string;
+  categoria: Categoria;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ReservaService {
+  reservas: ReservaDeTurno[]
+
+  constructor() {
+    this.reservas = data_DatosDeReservas;// Initialize with example data
+  }
+
+  formattedDate(date: Date){
+    let dd = String(date.getDate()).padStart(2, '0');
+    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0
+    let yyyy = date.getFullYear();
+    return yyyy + '/' + mm + '/' + dd;
+  }
+
+  // Get a list of reservations based on filters
+  getReservas(filtros: ReservaDeTurnoFiltro): Observable<ReservaDeTurnoFormateada[]> {
+    // Simulate filtering based on filters if needed
+    let filteredReservas = this.reservas;
+
+    if (filtros.doctor) {
+      filteredReservas = filteredReservas.filter((reserva) =>
+        reserva.doctor.nombre.toLowerCase().concat(' ',reserva.doctor.apellido.toLowerCase()).includes(filtros.doctor.toLowerCase())
+      );
+    }
+    if (filtros.paciente) {
+      filteredReservas = filteredReservas.filter((reserva) =>
+      reserva.paciente.nombre.toLowerCase().concat(' ',reserva.paciente.apellido.toLowerCase()).includes(filtros.paciente.toLowerCase())
+      );
+    }
+    if (filtros.fechaDesde) {
+      filteredReservas = filteredReservas.filter((reserva) =>
+        reserva.fecha >= new Date(filtros.fechaDesde.replace(/-/g, '/'))
+      );
+    }
+    if (filtros.fechaHasta) {
+      filteredReservas = filteredReservas.filter((reserva) =>
+        reserva.fecha <= new Date(filtros.fechaHasta.replace(/-/g, '/'))
+        );
+    }
+
+    // Format the 'fecha' property using Angular's formatDate
+    let formattedReservas: ReservaDeTurnoFormateada[]  = filteredReservas.map((reserva) => {
+      return {
+        ...reserva,
+        fecha: this.formattedDate(reserva.fecha), // Format the 'fecha' property
+        doctor: (reserva.doctor.nombre + " " + reserva.doctor.apellido),
+        paciente: (reserva.paciente.nombre + " " + reserva.paciente.apellido)
+      };
+    });
+
+    return of(formattedReservas);
+  }
+
+  //metodo para obtener la lista de categorias, usada para otros componentes
+  getAllReservas(): Observable<ReservaDeTurno[]>{
+    return new Observable<ReservaDeTurno[]>(observer => {
+      observer.next(this.reservas);
+      observer.complete();
+    });
+  }
+
+  // Add a new reservation
+  addReserva(reserva: ReservaDeTurno): Observable<ReservaDeTurno[]> {
+    // Generate a unique ID for the new reservation
+    reserva.id = this.generateNewId();
+
+    // Push the new reservation to the array
+    this.reservas.push(reserva);
+    console.log(reserva);
+    return of(this.reservas);
+  }
+
+  // Cancel a reservation by its ID
+  cancelReserva(idReserva: number): Observable<ReservaDeTurno[]> {
+    const index = this.reservas.findIndex((r) => r.id === idReserva);
+
+    if (index !== -1) {
+      // Remove the reservation from the array
+      this.reservas.splice(index, 1);
+    }
+
+    return of(this.reservas);
+  }
+
+  // Generate a unique ID for a new reservation (you may need to implement this logic)
+  generateNewId(): number {
+    // Find the maximum ID in the current data
+    const maxId = Math.max(...this.reservas.map((p) => p.id));
+
+    // Generate a new ID by incrementing the maximum ID
+    return maxId + 1;
+  }
+}
+
+

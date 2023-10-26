@@ -1,0 +1,121 @@
+app-routing.module.ts
+import { Component, NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ConsultaComponent } from './components/consulta/consulta.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegistroDePersonasComponent } from './components/registro-de-personas/registro-de-personas.component';
+import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva-de-turnos.component';
+import { FichaClinicaComponent } from './components/ficha-clinica/ficha-clinica.component';
+
+const routes: Routes = [
+  { path: '', component: HomeComponent }, // Redirect to 'home' by default
+  { path: 'consultas', component: ConsultaComponent }, // Replace 'ConsultaComponent' with your component
+  { path: 'registro-de-personas', component: RegistroDePersonasComponent},
+  { path: 'reserva-de-turnos', component: ReservaDeTurnosComponent},
+  { path: 'ficha-clinica', component: FichaClinicaComponent},
+  // Add more routes for other components/pages as needed
+];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+app.component.css
+
+
+app.component.html
+<header>
+</header>
+
+<main>
+  <!-- The router-outlet is a placeholder for displaying the current route's component -->
+  <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+  <app-body
+    [collapsed] = "isSideNavCollapsed"
+    [screenWidth] = "screenWidth"
+  >
+  </app-body>
+  <router-outlet></router-outlet>
+  <app-footer
+    [collapsed] = "isSideNavCollapsed"
+    [screenWidth] = "screenWidth"
+  >
+  </app-footer>
+</main>
+
+
+app.component.ts
+import { Component } from '@angular/core';
+
+interface SideNavToggle{
+  screenWidth: number;
+  collapsed: boolean;
+}
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'patient-tracking-system';
+
+  isSideNavCollapsed = false;
+  screenWidth = 0;
+
+  onToggleSideNav(data: SideNavToggle):void{
+    this.screenWidth = data.screenWidth;
+    this.isSideNavCollapsed = data.collapsed;
+  }
+}
+
+
+app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { ConsultaComponent } from './components/consulta/consulta.component';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { RegistroDePersonasComponent } from './components/registro-de-personas/registro-de-personas.component';
+import { ReservaDeTurnosComponent } from './components/reserva-de-turnos/reserva-de-turnos.component';
+import { FichaClinicaComponent } from './components/ficha-clinica/ficha-clinica.component';
+import { BodyComponent } from './body/body.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { FooterComponent } from './footer/footer.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    ConsultaComponent,
+    RegistroDePersonasComponent,
+    ReservaDeTurnosComponent,
+    FichaClinicaComponent,
+    BodyComponent,
+    SidenavComponent,
+    FooterComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    RouterModule,
+    FormsModule,
+    HttpClientModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+

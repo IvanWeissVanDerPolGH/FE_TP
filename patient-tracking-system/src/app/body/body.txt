@@ -1,0 +1,59 @@
+body.component.css
+.body{
+  width: calc(100% - 6rem);
+  min-height: 100vh;
+  height: auto;
+  margin-left: 5rem;
+  z-index: 0;
+  position: relative;
+  top: 0;
+  transition: all .5s ease;
+  background: #a3abc0ff;
+  padding: 3rem;
+}
+
+.body-trimmed{
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+}
+
+.body-md-screen{
+  width: calc(100% - 6rem);
+  margin-left: 6rem;
+}
+
+
+body.component.html
+<div class="body" [ngClass]="getBodyClass()">
+  <router-outlet></router-outlet>
+</div>
+
+
+body.component.ts
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-body',
+  templateUrl: './body.component.html',
+  styleUrls: ['./body.component.css']
+})
+export class BodyComponent {
+  constructor(){}
+  ngOnInit(): void{}
+
+  @Input() collapsed = false;
+  @Input() screenWidth = 0;
+
+
+  getBodyClass(): string{
+    let styleClass = '';
+    if(this.collapsed && this.screenWidth > 768){
+      styleClass = 'body-trimmed';
+    } else if(this.collapsed && this.screenWidth <= 768 && this.screenWidth > 0){
+      styleClass = 'body-md-screen';
+    }
+    return styleClass;
+  }
+}
+
+
